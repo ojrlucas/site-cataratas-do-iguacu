@@ -4,13 +4,17 @@
     font-family: 'Roboto', sans-serif;
 }
 
-body {
-    max-width: 1920px;
-    overflow-x: hidden;
+a {
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
 }
 
-#container {
-    display: flex;
+body {
+    max-width: 1550px;
+    overflow-x: hidden;
+    min-height: 100vh; 
 }
 
 nav {
@@ -29,6 +33,7 @@ nav {
 
 .nav-logo img {
     width: 90px;
+    border-radius: 50%;
 }
 
 .nav-links {
@@ -45,15 +50,20 @@ nav {
 }  
 
 .nav-links a {
+    display: inline-flex;
     padding: 10px;
     width: 260px;
-    color: #fff;
-    display: inline-block;
-    text-decoration: none;
 }
 
 .nav-links a:hover {
     background-color: #ffffff17;
+}
+
+.nav-links a i {
+    margin: 0px -40px 0px 40px;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
 }
 
 .nav-selecionado {
@@ -64,15 +74,15 @@ nav {
     margin-left: 60px;
 }
 
-.nav-natureza-img {
+.nav-natureza-img, .login-natureza-img {
     position: absolute;
     bottom: -5px;
     width: 100%;
 }
 
-main {
+.main-geral {
     width: 82%;
-    margin-left: auto;
+    margin-left: 280px;
 }
 
 .login-registro {
@@ -87,22 +97,19 @@ main {
     padding: 10px;
     border-radius: 10px;
     margin-left: 5px;
-    color: #fff;
-    font-weight: bold;
-    display: inline-block;
     background: #006ec8 url('../imagens/background-ceu.png') repeat-y top left;
-    text-decoration: none; 
 }
 
 .login-registro a:hover {
-    background: #036800;
+    background: #4CAF50;
     color: #fff;
 }
 
-.paralax {
+.parallax {
     height: 100vh;
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
@@ -112,17 +119,259 @@ main {
     }
 }
 
-.cataratas-paralax1 {
-    margin-bottom: -29px;
+.cataratas-home {
     background: #027700 url('../imagens/cataratas-1.png') no-repeat fixed center/cover;
 }
 
-.cataratas-paralax2 {
-    margin-top: 200px;
-    background: #027700 url('../imagens/cataratas-2.png') no-repeat fixed center/cover;
+.titulo-home {
+    margin-top: 100px;
 }
 
-.arbusto {
-    height: 0px;
-    background-color: rgba(0, 0, 0, 0);
+.titulo-home h1 {
+
+    font-size: 3.5em; 
+    text-align: center;
+}
+
+.titulo-home span {
+    font-size: 0.56em;
+    font-weight: normal; 
+    display: block; 
+}
+
+.titulo-esquerda {
+    margin-right: 310px;
+}
+
+.titulo-direita {
+    margin-left: 60px;   
+}
+
+.comprar-ingresso-home {
+    margin-top: 80px;
+}
+
+.comprar-ingresso-home a {
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #006ca5;
+}
+
+.comprar-ingresso-home a:hover {
+    background-color: #4CAF50;
+}
+
+.informacoes-home {
+    height: 50px;
+    width: 80%;
+    margin-top: 90px;
+    background-color: #ffffffc6;
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.informacoes-home a i {
+    margin-right: 10px;
+    opacity: 0.6;
+}
+
+.informacoes-home a {
+    width: 25%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+    color: #000;
+}
+
+.informacoes-home a:hover {
+    background-color: #ffffffca;
+}
+
+.informacoes-home-divisao {
+    border-right: 2px solid rgba(0, 0, 0, 0.426);
+}
+
+footer {
+    width: 82%;
+    padding: 20px;
+    margin-left: 280px;
+    background-color: #006ca5;
+    color: #ffffffd2; 
+}
+
+footer h3 {
+    font-size: 15px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.rodape-info-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.rodape-info {
+    margin: 0px 20px 20px 20px;
+    font-size: 13px;
+}   
+
+.rodape-info p, .rodape-info a {
+    font-weight: normal;
+    opacity: 0.9;
+}
+
+.rodape-info a i {
+    margin-right: 7px;
+}
+
+.rodape-info a:hover {
+    color: #cccccc; 
+}
+
+.rodape-direitos-autorais {
+    margin-top: 10px;
+    opacity: 0.9;
+    display: flex;
+    justify-content: center;
+}
+
+/*Páginas de Login e Registro*/
+
+#container-login-registro {
+    background: #027700 url('../imagens/cataratas-3.png') no-repeat top right;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+}
+
+.main-login-registro {
+    width: 44%;
+    height: 100vh;
+    background-color: #006ca5;
+}
+
+.login-registro-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-registro-logo img {
+    margin: 30px 0px 30px 0px;
+    width: 120px;
+    border-radius: 50%;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 45%;
+    width: 100%;
+}
+
+.formulario h1 {
+    color: #fff;
+    order: -1;
+    margin: 30px 0px 30px 0px;
+    font-size: 30px;
+}
+
+form {
+	label {
+		color: #fff; 
+    	align-self: flex-start;
+    	margin-left: 2.5%;
+	}
+
+	input {
+		width: 94%;
+		height: 30px;
+    	margin: 0% 3% 1% 2.5%;
+		padding: 5px;
+		border: 1px solid #ccc; 
+		border-radius: 5px; 
+	}
+
+	input:focus {
+		outline: none; 
+		border-color: #036800; 
+		box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+		background-color: #f8f8f8;
+	}
+
+	button {
+		width: 96%;
+		height: 40px;
+		margin: 2.5% 3% 0% 2.5%;
+		background-color: #4CAF50;
+		color: white; 
+		border: none;
+		border-radius: 5px; 
+		cursor: pointer;
+		font-size: 16px;
+	}
+
+	button:hover {
+		background-color: #036800;
+	}
+}
+
+.email-numero-container, .senha-confirmacao-container {
+    display: flex;
+    justify-content: space-between;
+	gap: 10px;
+	margin: 0% 1.8% 0% 1.6%;
+}
+
+.email-numero-container div, .senha-confirmacao-container div {
+    width: 50%;
+
+    .email, .senha {
+        margin: 0% 0% 0% 1.6%;
+    }
+    
+    .numero, .confirmacao-senha {
+        margin: 0% 1.6% 0% 0%;
+    }
+}
+
+.esqueceu-senha {
+	font-size: 12px;
+	margin-left: 2.5%;
+}
+
+.esqueceu-senha a {
+    color: #fff;
+}
+
+.esqueceu-senha a:hover {
+    color: #ccc;
+    text-decoration: underline;
+}
+
+.registro-link {
+    margin-top: 30px;
+    width: 100%;
+    text-align: center;
+    opacity: 0.7;
+}
+
+.registro-link p {
+    color: #fff;
+}
+
+.registro-link a {
+    color: #fff;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.registro-link a:hover {
+    color: #ccc;
 }
