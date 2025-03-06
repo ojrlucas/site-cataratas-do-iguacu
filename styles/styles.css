@@ -4,6 +4,14 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.menu-toggle-container {
+    display: none;
+}
+
+#menu-toggle {
+    display: none;
+}
+
 p, a, h1, h2, h3, label {
     color: #fff;
 }
@@ -16,7 +24,8 @@ a {
 
 body {
     overflow-x: hidden;
-    min-height: 100vh; 
+    min-height: 100vh;
+    background-color: #006ca5; 
 }
 
 #container {
@@ -25,7 +34,6 @@ body {
     "main-geral"
     "rodape";
     grid-template-columns: 1fr;
-
 }
 
 nav {
@@ -40,6 +48,7 @@ nav {
     margin-top: 15px;
     display: flex;
     justify-content: center; 
+    align-items: center;
 }
 
 .nav-logo img {
@@ -138,17 +147,17 @@ nav {
     background-position: top right;
 }
 
-.titulo-home {
+.titulo {
     margin-top: 100px;
 }
 
-.titulo-home h1 {
+.titulo h1 {
 
     font-size: 3.5em; 
     text-align: center;
 }
 
-.titulo-home span {
+.titulo span {
     font-size: 0.56em;
     font-weight: normal; 
     display: block; 
@@ -177,7 +186,7 @@ nav {
 }
 
 .informacoes-home {
-    height: 50px;
+    height: auto;
     width: 80%;
     margin-top: 90px;
     background-color: #ffffffc6;
@@ -187,18 +196,14 @@ nav {
     align-items: center;
 }
 
-.informacoes-home a i {
-    margin-right: 10px;
-    opacity: 0.6;
-}
-
 .informacoes-home a {
     width: 25%;
-    height: 100%;
+    height: 50px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-weight: normal;
+    border-right: 1px solid #000;
     color: #000;
 }
 
@@ -206,8 +211,9 @@ nav {
     background-color: #ffffffca;
 }
 
-.informacoes-home-divisao {
-    border-right: 2px solid rgba(0, 0, 0, 0.426);
+.informacoes-home a i {
+    margin-right: 10px;
+    opacity: 0.6;
 }
 
 footer {
@@ -257,8 +263,8 @@ footer h3 {
 /*Páginas de Login e Registro*/
 
 #container-login-registro {
-    background: #027700 url('../imagens/cataratas-3.png') no-repeat top right;
     height: 100vh;
+    display: flex;
 }
 
 .main-login-registro {
@@ -267,16 +273,26 @@ footer h3 {
     height: 100vh;
 }
 
-.login-registro-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.login-registro-logo img {
-    margin: 30px 0px 40px 0px;
+.logo-style img {
     width: 120px;
     border-radius: 50%;
+}
+
+.login-registro-logo {
+    display: none;
+}
+
+.logo-background {
+    width: 56%;
+    display: flex;  
+    justify-content: center;
+    align-items: center;
+    background: #027700 url('../imagens/cataratas-3.png') no-repeat top right;
+}
+
+.logo-background img {
+    width: 300px;
+    opacity: 0.8;
 }
 
 .formulario {
@@ -284,7 +300,7 @@ footer h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 45%;
+    height: 75%;
 }
 
 .formulario h1 {
@@ -371,119 +387,4 @@ form button:hover {
 
 .registro-link a:hover {
     color: #ccc;
-}
-
-@media only screen and (max-width: 1024px) {
-    .main-geral {
-        margin-top: 120px;
-    }
-
-    nav {
-        width: 100%;
-        height: 120px;
-        background: #006ec8;
-        position: fixed;
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        padding: 0 20px;
-    }
-
-    .nav-natureza-img {
-        display: none;
-    }
-
-    .nav-logo {
-        width: 20%;
-        display: flex;
-        justify-content: center; 
-        align-items: center;
-    }
-
-    .nav-links {
-        margin: 0;
-        width: auto;
-        height: 120px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .nav-links ul {
-        display: flex;
-        justify-content: space-around;
-        list-style: none;
-        width: auto;
-        padding: 0;
-    }
-
-    .nav-links li {
-        margin: 0px 5px 0px 5px;
-        height: 120px;
-    }
-
-    .nav-links h3 {
-        margin-left: 10px;
-    }  
-    
-    .nav-links a {
-        padding: 10px;
-        height: 97px;
-        font-size: 14px;
-        display: inline-flex;
-        align-items: center;
-        width: auto;
-        white-space: nowrap;
-    }
-
-    .nav-links a:hover {
-        background: none;
-        border-bottom: 4px solid #ffffff7a;
-    }
-
-    .nav-links a i {
-        margin: 0px;
-    }
-
-    .nav-selecionado {
-        background: none;
-        border-bottom: 4px solid #fff;
-    }
-    
-    .login-registro-nav {
-        display: block;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .login-registro-nav a {
-        background: #4CAF50;
-        margin: 5px;
-        font-size: 14px;
-        padding: 6px;
-    }
-
-    .login-registro-nav a:hover {
-        background: #008542;
-
-    }
-
-    .login-registro-main {
-        display: none;
-    }
-    
-    .main-geral {
-        margin-left: 0px;
-    }
-
-    footer {
-        margin-left: 0px;
-    }
-
-    /*Login e Registro*/
-
-    .main-login-registro {
-        width: 100%;
-    }
 }
