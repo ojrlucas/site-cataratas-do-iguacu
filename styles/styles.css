@@ -25,7 +25,7 @@ a {
 body {
     overflow-x: hidden;
     min-height: 100vh;
-    background-color: #006ca5; 
+    background-color: #006ec8;
 }
 
 #container {
@@ -141,10 +141,53 @@ nav {
     }
 }
 
-.cataratas-home {
+.titulo-home {
     background: #027700 url('../imagens/cataratas-1.png') no-repeat fixed;
     background-size: cover;
     background-position: top right;
+}
+
+.titulo-sobre {
+    background: #027700 url('../imagens/cataratas-5.png') no-repeat fixed;
+    background-size: cover;
+    background-position: top right;
+}
+
+.titulo-fotos {
+    background: #027700 url('../imagens/cataratas-4.png') no-repeat fixed;
+    background-size: cover;
+    background-position: top right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    height: 600px;
+    margin-top: 0px;
+}
+
+.fotos-area {
+    display: flex;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -100px;
+}
+
+.fotos {
+    width: 400px;
+    height: 300px;
+    border-radius: 30px;
+    margin: 20px;
+    background-color: #4c91c9;
+    border: 1px solid #c9c9c9;
+    ;
+}
+
+.fotos img {
+    width: 100%;
+    border-radius: 30px 30px 0px 0px;
+    height: 80%;
 }
 
 .titulo {
@@ -215,6 +258,17 @@ nav {
     margin-right: 10px;
     opacity: 0.6;
 }
+
+/*página sobre*/
+.sobre-container {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+/*página de fotos*/
+
+/*rodapé*/
 
 footer {
     grid-area: rodape;
