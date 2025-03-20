@@ -21,16 +21,10 @@
                     <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
                 </a>
             </section>
-            
-            <section class="menu-toggle-container">
-                <label for="menu-toggle">
-                    <i class="fas fa-bars menu-toggle"></i>
-                </label>
-            </section>
-            <input type="checkbox" id="menu-toggle">
 
             <section class="nav-links">
-                <ul>
+                <i onclick="navLinksSuperior()" class="fas fa-bars menu-toggle"></i>
+                <ul id="lista-links-superior">
                     <li>
                         <a class="nav-selecionado" href="#container" aria-label="Voltar a página inicial">
                             <i class="fas fa-home"></i> <h3>Home</h3>
@@ -131,6 +125,8 @@
             </div>
         </footer>
     </div>
+
+    <script src="javascript/menu.js"></script>
     
 </body>
 </html>

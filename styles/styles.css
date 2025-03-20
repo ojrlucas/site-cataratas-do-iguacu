@@ -4,14 +4,6 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.menu-toggle-container {
-    display: none;
-}
-
-#menu-toggle {
-    display: none;
-}
-
 p, a, h1, h2, h3, label {
     color: #fff;
 }
@@ -85,6 +77,10 @@ nav {
     display: flex;
     align-items: center;
 }
+
+.nav-links>i {
+    display: none;
+ } 
 
 .nav-selecionado {
     background-color: #ffffff6c;
