@@ -6,183 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="O Parque Nacional do Iguaçu, no Paraná, é um santuário natural que abriga as majestosas Cataratas do Iguaçu, oferecendo trilhas e passeios de barco para uma experiência inesquecível na natureza. É um destino imperdível para quem busca aventura e beleza natural.">
     <title>Fotos - Parque Nacional do Iguaçu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/styles-media.css">
-    <link rel="icon" href="imagens/parque-logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 </head>
 <body>
 
     <div id="container">
-        <nav>
-            <section class="nav-logo">
-                <a href="#container" aria-label="Voltar para a página inicial">
-                    <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
-                </a>
-            </section>
-
-            <section class="nav-links">
-                <i onclick="navLinksSuperior()" class="fas fa-bars menu-toggle"></i>
-                <ul id="lista-links-superior">
-                    <li>
-                        <a href="index.html" aria-label="Voltar a página inicial">
-                            <i class="fas fa-home"></i> <h3>Home</h3>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="sobre.html" aria-label="Acessar a página com informações sobre as Cataratas do Iguaçu">
-                            <i class="fas fa-info-circle"></i> <h3>Sobre</h3>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-selecionado" href="#container" aria-label="Acessar o álbum de fotos das Cataratas do Iguaçu">
-                            <i class="fas fa-images"></i> <h3>Fotos</h3>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="lazer.html" aria-label="Acessar a página com informações sobre as atividades de lazer das Cataratas do Iguaçu">
-                            <i class="fas fa-hiking"></i> <h3>Lazer</h3>
-                        </a>
-                    </li>
-                </ul>
-            </section>
-
-            <section class="login-registro-nav">
-                <a href="login.html" aria-label="Acesse a página para fazer login em nosso site">Login</a>
-                <a href="registre-se.html" aria-label="Acesse a página para registrar-se em nosso site">Registre-se</a>
-            </section>
-            
-            <section class="nav-natureza-img">
-                <img src="imagens/nav-natureza-img.png" alt="Imagem de um rio com uma árvore">
-            </section>
-        </nav>
-
-        <main class="main-geral">
-            <div class="fotos-container">
-                <section class="login-registro-main">
-                    <a href="login.html" aria-label="Acesse a página para fazer login em nosso site">Login</a>
-                    <a href="registre-se.html" aria-label="Acesse a página para registrar-se em nosso site">Registre-se</a>
+        <main>            
+            <div class="parallax d-flex justify-content-center align-items-center flex-column color-white">
+                <section class="titulo">
+                    <h1 class="text-center text-uppercase">Álbum de fotos</h1>
                 </section>
-
-                <section class="titulo-fotos parallax">
-                    <div class="titulo">
-                        <h1>ÁLBUM DE FOTOS</h1>
-                    </div>
-                </section>
-
-                <section class="fotos-area">
-                    <div class="grade-de-fotos">
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-5.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="http://www.driviaro.com.br/2020/01/cataratas-do-iguacu.html" target="_blank">Dri Viaro</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-6.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://www.getyourguide.com" target="_blank">Get Your Guide</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-7.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://www.flickr.com/photos/soldon/5633017861/" target="_blank">Flickr</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-8.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://meusonhoagentinapatagniasterradofogo.blogspot.com/2011/08/cataratas-de-iguacu-brasil-argentina.html" target="_blank">Meu Sonho</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-9.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://www.flickr.com/photos/soldon/5686635248" target="_blank">Flickr</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-10.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://pixabay.com/it/photos/cascate-di-igua%C3%A7u-cataratta-brasile-455610/" target="_blank">Pixabay</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-11.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://www.eaiferias.com/2016/10/foz-do-iguacu.html?utm_source=pinterest&amp;utm_medium=pin" target="_blank">Eai, Férias!</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-12.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://wikitravel.org/en/Igua%C3%A7u_Falls" target="_blank">Wikitravel</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div class="fotos">
-                            <figure>
-                                <img src="imagens/cataratas-13.jpg">
-                                <figcaption>
-                                    Foto extraída do site: <a href="https://www.flickr.com/photos/hulyk/32657091672" target="_blank">Flickr</a>
-                                </figcaption>
-                            </figure>
-                        </div>
-                    </div>                
-                </section>
-            </div>
         </main>
-
-        <footer>
-            <div class="rodape-container">
-                <div class="rodape-info-container">
-                    <section class="rodape-info">
-                        <h3>CONTATO</h3>
-                        <p>E-mail: contato@catarataspni.com.br</p>
-                        <p>Telefone: +55 (45) 3521-4400</p>
-                        <p>Whatsapp: +55 (45) 3521-4438</p>
-                    </section>
-        
-                    <section class="rodape-info">
-                        <h3>LOCALIZAÇÃO</h3>
-                        <p>BR 469, Km 18, Parque Nacional do Iguaçu</p>
-                        <p>Foz do Iguaçu / Paraná / Brasil</p>
-                        <p>CEP.: 85.859-899</p>
-                    </section>
-        
-                    <section class="rodape-info">
-                        <h3>REDES SOCIAIS</h3>
-                        <p><a href="https://www.instagram.com/cataratasdoiguacu" aria-label="Acessar o perfil do Instagram das Cataratas do Iguaçu" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></p>
-                        <p><a href="https://www.facebook.com/cataratasdoiguacu/" aria-label="Acessar o perfil do Facebook das Cataratas do Iguaçu"><i class="fab fa-facebook" target="_blank"></i> Facebook</a></p>
-                        <p><a href="https://www.youtube.com/channel/UCjygzVAlqTdRX13UZ3V1vzw/videos" aria-label="Acessar o canal do YouTube das Cataratas do Iguaçu" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></p>
-                    </section>
-                </div>
-
-                <section class="rodape-direitos-autorais">
-                    <p>&copy; 2025 Parque Nacional do Iguaçu. Feito para fins de estudo (não oficial).</p>
-                </section>
-            </div>
-        </footer>
     </div>
 
-    <script src="javascript/menu.js"></script>
+    <script src="javascript/nav-footer.js"></script>
     
 </body>
 </html>

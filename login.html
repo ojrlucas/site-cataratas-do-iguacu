@@ -6,48 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="O Parque Nacional do Iguaçu, no Paraná, é um santuário natural que abriga as majestosas Cataratas do Iguaçu, oferecendo trilhas e passeios de barco para uma experiência inesquecível na natureza. É um destino imperdível para quem busca aventura e beleza natural.">
     <title>Acesar Conta - Parque Nacional do Iguaçu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/styles-media.css">
-    <link rel="icon" href="imagens/parque-logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 </head>
-<body>
+<body> 
 
-    <div id="container-login-registro">
-        <main class="main-login-registro">
-            <section class="login-registro-logo logo-style">
+    <div id="container-login-registro d-flex">
+        <main class="main-login-registro position-fixed d-flex flex-column align-items-center">
+            <section class="login-registro-logo d-flex justify-content-center">
                 <a href="index.html" aria-label="Voltar para a página inicial">
                     <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
                 </a>
             </section>
 
-            <section class="formulario">
+            <section class="formulario d-flex justify-content-center align-items-center flex-column color-white">
                 <h1>Acessar Conta</h1>
                 <form action="/login" method="POST">
-                    <label for="email">E-mail:</label>
+                    <label class="d-block" for="email">E-mail:</label>
                     <input type="email" id="email" name="email" placeholder="  seuemail@exemplo.com" required aria-label="Digite seu e-mail">
-                    <label for="senha">Senha:</label>
+                    <label class="d-block" for="senha">Senha:</label>
                     <input type="password" id="senha" name="senha" placeholder="  Sua senha" required aria-label="Digite sua senha">
     
                     <div class="esqueceu-senha">
-                        <a href="#" aria-label="Recuperar senha">Esqueceu sua senha?</a>
+                        <a class="color-white" href="#" aria-label="Recuperar senha">Esqueceu sua senha?</a>
                     </div>
                     
-                    <button class="form" type="submit">Fazer Login</button>
+                    <button class="form color-white" type="submit">Fazer Login</button>
                 </form>
     
-                <div class="registro-link">
-                    <p>Não possui uma conta? <a href="registre-se.html" aria-label="Ir para a página de registro">Registre-se</a></p>
+                <div class="registro-login-link color-white text-center">
+                    <p>Não possui uma conta? <a class="color-white" href="registre-se.html" aria-label="Ir para a página de registro">Registre-se</a></p>
                 </div>
             </section>
         </main>
-
-        <div class="logo-background logo-style">
-            <a href="index.html" aria-label="Voltar para a página inicial">
-                <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
-            </a>
-        </div>
     </div>
     
 </body>
