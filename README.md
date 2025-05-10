@@ -17,6 +17,7 @@ Aqui está uma demonstração visual do projeto:
 ## 📁 Estrutura de Diretórios
 
 ```plaintext
+<<<<<<< HEAD
 /
 ├── imagens/               # Recursos visuais do site
 ├── javascript/            # Scripts utilizados
@@ -29,3 +30,23 @@ Aqui está uma demonstração visual do projeto:
 ├── registre-se.html       # Tela de cadastro
 ├── nav-menu.html          # Menu de navegação
 ├── footer.html            # Rodapé reutilizável
+=======
+site-cataratas-do-iguacu/
+├── index.html
+├── ingressos.html
+├── login.html
+├── sobre.html
+├── carregamento-dinamico/
+│   ├── nav-menu.html
+│   ├── footer.html
+│   └── divs-info-home.html
+├── javascript/
+│   └── nav-footer.js
+├── styles/
+│   ├── styles.css
+│   └── styles-media.css
+├── imagens/
+│   └── (imagens)
+├── README.md
+
+>>>>>>> 4ad8dd6 (Update README.md)
