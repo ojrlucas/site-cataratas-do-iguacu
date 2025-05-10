@@ -3,6 +3,10 @@
     padding: 0px;
 }
 
+body {
+    background-color: #E5E5E5;
+}
+
 .color-white {
     color: white;
 }
@@ -44,7 +48,7 @@ nav {
     background-color: #004d8b;
     left: 0;
     top: 80px;
-    position: absolute;
+    position: fixed;
 }
 
 .login-registro {
@@ -98,12 +102,16 @@ footer h3 {
     font-size: 14px;
 }
 
-.parallax {
-    height: 100vh;
+.bg-titulo {
+    height: 330px;
     width: 100%;
     background: #027700 url('../imagens/cataratas-1.png') no-repeat fixed;
     background-size: cover;
     background-position: top right;
+}
+
+.home {
+    height: 100vh;
 }
 
 .titulo {
@@ -126,18 +134,26 @@ footer h3 {
     margin-left: 20px;   
 }
 
-.comprar-ingresso-home {
+.subtitulo>h2 {
+    font-size: 19px;
+}
+
+.azul {
+    color: #004d8b;
+}
+
+.home>.comprar-ingresso {
     margin-top: 80px;
 }
 
-.comprar-ingresso-home a {
+.comprar-ingresso a {
     padding: 8px;
     font-size: 12px;
     border-radius: 10px;
     background-color: #006ca5;
 }
 
-.comprar-ingresso-home a:hover {
+.comprar-ingresso a:hover {
     background-color: #4CAF50;
     color: white;    
     border-bottom: 3px solid white;
@@ -166,6 +182,36 @@ footer h3 {
 .informacoes-home a i {
     margin-right: 10px;
     opacity: 0.5;
+}
+
+.divs-informacoes-home img {
+    width: 100%;
+    max-width: 900px;
+}
+
+.divs-informacoes-home {
+    background-color: rgba(0, 0, 0, 0.87);
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.text-info-home {
+    width: 90%;
+    max-width: 436px;
+}
+
+.text-info-home h1 {
+    font-size: 20px;
+}
+
+#div-funcionamento p {
+    font-size: 15px;
+    margin-bottom: 4px;
 }
 
 #container-login-registro {
@@ -253,3 +299,68 @@ form button:hover {
 .registro-link a {
     text-decoration: underline;
 }
+
+.lazer-area {
+    max-width: 1400px;
+}
+
+.flex-card {
+    width: 90%;
+    max-width: 310px;
+    height: 204px;
+    background-color: #006CA6;
+    border-radius: 8px;
+    font-size: 12px;
+    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.4);
+}
+
+.flex-card h3 {
+    font-size: 14px;
+}
+
+.flex-card a {
+    color: #6c757d;
+    cursor: pointer;
+    width: 110px;
+    height: 25px;
+    margin-top: -4px;
+    border-radius: 7px;
+    position: absolute;
+    background-color: #298fd2;
+}
+
+.flex-card>span>p {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    width: 90%;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-card-exibido {
+    background-color: rgba(0, 0, 0, 0.87);
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 999;
+    justify-content: center;    
+}
+
+.text-card-exibido p {
+    width: 80%;
+    max-width: 600px;
+    margin-top: 30px;
+    -webkit-line-clamp: 999;
+}
+
+.text-card-exibido a {
+    position: relative;
+    margin-top: 30px;
+}
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles-media.css">
+
+</head>
+<body>
+    <div id="div-mapa" class="divs-informacoes-home" onclick="exibirDiv('div-mapa')">
+        <div class="imagem-mapa">
+            <img src="imagens/mapa.png" alt="mapa do parque nacional do iguaçu">
+        </div>
+    </div>
+
+    <div id="div-funcionamento" class="divs-informacoes-home" onclick="exibirDiv('div-funcionamento')">
+        <div class="text-info-home">
+            <h1 class="color-white text-uppercase text-center">Funcionamento <span class="fw-bold">do parque</span></h1>
+            <p class="color-white mt-5">O Parque Nacional do Iguaçu abre todos os dias do ano.</p>
+            <p class="color-white">De segunda a sexta: das 9h às 16h</p>
+            <p class="color-white">Sábado e domingos: das 8h30 às 16h</p>
+        </div>
+    </div>
+
+    <div id="div-estacionamento" class="divs-informacoes-home" onclick="exibirDiv('div-estacionamento')">
+        <div class="text-info-home">
+            <h1 class="color-white text-uppercase text-center"><span class="fw-bold">Estacionamento</span> do parque</h1>
+            <p class="color-white mt-5">O parque oferece a conveniência de estacionamento terceirizado, administrado pela Indigo, visando garantir maior segurança e tranquilidade para os visitantes durante seus passeios. (botão desabilitado por ser website de estudos)</p>
+            <span class="d-flex justify-content-center"><button disabled class="w-50 btn btn-outline-light text-uppercase mt-4" type="button">reservar</button></span>
+        </div>
+    </div>
+
+    <script src="javascript/nav-footer.js"></script>
+</body>
+</html>

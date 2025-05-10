@@ -1,36 +1,25 @@
-# 🌊 Site Cataratas do Iguaçu
+## 🌊 Projeto Educacional: Site Institucional Cataratas do Iguaçu
 
-Este repositório contém um site institucional fictício desenvolvido com foco em práticas modernas de desenvolvimento web, como **Mobile First**, com HTML5, CSS3, JavaScript e Bootstrap. O projeto visa promover o Parque Nacional do Iguaçu, um dos maiores patrimônios naturais do Brasil.
+Este repositório contém o desenvolvimento de um site institucional fictício, parte das atividades do programa Entra21. O projeto utiliza práticas modernas de desenvolvimento web, como Mobile First, e tecnologias como HTML5, CSS3, JavaScript e Bootstrap. O objetivo é criar uma plataforma digital para promover o Parque Nacional do Iguaçu, um importante patrimônio natural do Brasil.
 
 ## 📸 Demonstração
-Aqui está uma demonstração visual do projeto:
+Projeto Figma: https://www.figma.com/design/FbTv7fyuP7kDdv6qgzyicu/Parque-Nacional-do-Igua%C3%A7u?node-id=0-1&t=dUj65HaNXLgTcdQg-1
 
-![Demonstração do Projeto](https://i.postimg.cc/K8BfnQCR/Captura-de-tela-2025-04-30-011917.png)
+![Demonstração do Projeto](https://i.postimg.cc/LsTwRq61/Parque-Nacional-do-Igua-u.jpg)
 
 ## 🔧 Tecnologias Utilizadas
 
-- ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)  
-- ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)  
-- ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)  
-- ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=flat&logo=bootstrap&logoColor=white)  
+<div style="display: inline-block; text-align: center;">
+  <img alt="HTML" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg">
+  <img alt="CSS" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg">
+  <img alt="Bootstrap" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-original.svg">
+  <img alt="JavaScript" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-plain.svg">
+</div>
+
 
 ## 📁 Estrutura de Diretórios
 
 ```plaintext
-<<<<<<< HEAD
-/
-├── imagens/               # Recursos visuais do site
-├── javascript/            # Scripts utilizados
-├── styles/                # Estilos CSS do projeto
-├── index.html             # Página inicial
-├── sobre.html             # Página institucional sobre o parque
-├── album-de-fotos.html    # Galeria de imagens
-├── lazer.html             # Atrações e opções de lazer
-├── login.html             # Tela de login
-├── registre-se.html       # Tela de cadastro
-├── nav-menu.html          # Menu de navegação
-├── footer.html            # Rodapé reutilizável
-=======
 site-cataratas-do-iguacu/
 ├── index.html
 ├── ingressos.html
@@ -49,4 +38,3 @@ site-cataratas-do-iguacu/
 │   └── (imagens)
 ├── README.md
 
->>>>>>> 4ad8dd6 (Update README.md)
