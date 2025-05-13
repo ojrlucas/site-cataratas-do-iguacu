@@ -10,12 +10,6 @@
 
 </head>
 <body>
-    <div id="div-mapa" class="divs-informacoes-home" onclick="exibirDiv('div-mapa')">
-        <div class="imagem-mapa">
-            <img src="imagens/mapa.png" alt="mapa do parque nacional do iguaçu">
-        </div>
-    </div>
-
     <div id="div-funcionamento" class="divs-informacoes-home" onclick="exibirDiv('div-funcionamento')">
         <div class="text-info-home">
             <h1 class="color-white text-uppercase text-center">Funcionamento <span class="fw-bold">do parque</span></h1>
@@ -25,11 +19,25 @@
         </div>
     </div>
 
+    <div id="div-como-chegar" class="divs-informacoes-home">
+        <div class="iframe d-flex flex-wrap justify-content-center align-items-center">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3602.334372034531!2d-53.8177841!3d-25.460508!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94f14d6db34e243d%3A0x6e633cd35854aa8f!2sParque%20Nacional%20Igua%C3%A7u!5e0!3m2!1spt-BR!2sbr!4v1747163159901!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+            <button onclick="exibirDiv('div-como-chegar')" class="btn btn-outline-light text-uppercase mt-5" type="button">Sair</button>
+        </div>
+    </div>
+
     <div id="div-estacionamento" class="divs-informacoes-home" onclick="exibirDiv('div-estacionamento')">
         <div class="text-info-home">
             <h1 class="color-white text-uppercase text-center"><span class="fw-bold">Estacionamento</span> do parque</h1>
             <p class="color-white mt-5">O parque oferece a conveniência de estacionamento terceirizado, administrado pela Indigo, visando garantir maior segurança e tranquilidade para os visitantes durante seus passeios. (botão desabilitado por ser website de estudos)</p>
             <span class="d-flex justify-content-center"><button disabled class="w-50 btn btn-outline-light text-uppercase mt-4" type="button">reservar</button></span>
+        </div>
+    </div>
+
+    <div id="div-mapa" class="divs-informacoes-home" onclick="exibirDiv('div-mapa')">
+        <div class="imagem-mapa">
+            <img src="imagens/mapa.png" alt="mapa do parque nacional do iguaçu">
         </div>
     </div>
 

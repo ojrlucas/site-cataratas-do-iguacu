@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
 
     <meta charset="UTF-8">
@@ -15,15 +15,9 @@
 </head>
 <body> 
 
-    <div id="container-login-registro d-flex">
-        <main class="main-login-registro position-fixed d-flex flex-column align-items-center">
-            <section class="login-registro-logo d-flex justify-content-center">
-                <a href="index.html" aria-label="Voltar para a página inicial">
-                    <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
-                </a>
-            </section>
-
-            <section class="formulario d-flex justify-content-center align-items-center flex-column color-white">
+    <main class="container-login-registro position-fixed d-flex bg-titulo">
+        <section class="main-login-registro position-fixed d-flex flex-column align-items-center justify-content-center">
+            <div class="formulario d-flex justify-content-center align-items-center flex-column color-white">
                 <h1>Acessar Conta</h1>
                 <form action="/login" method="POST">
                     <label class="d-block" for="email">E-mail:</label>
@@ -41,9 +35,15 @@
                 <div class="registro-login-link color-white text-center">
                     <p>Não possui uma conta? <a class="color-white" href="registre-se.html" aria-label="Ir para a página de registro">Registre-se</a></p>
                 </div>
-            </section>
-        </main>
-    </div>
+            </div>
+        </section>
+
+        <section class="logo-login-registro logo-background logo-style d-flex justify-content-center align-items-center">
+            <a href="index.html" aria-label="Voltar para a página inicial">
+                <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
+            </a>
+        </section>
+    </main>
     
 </body>
 </html>

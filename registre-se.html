@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
 
     <meta charset="UTF-8">
@@ -15,15 +15,9 @@
 </head>
 <body>
 
-    <div id="container-login-registro">
-        <main class="main-login-registro">
-            <section class="login-registro-logo logo-style">
-                <a href="index.html" aria-label="Voltar para a página inicial">
-                    <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
-                </a>
-            </section>
-
-            <section class="formulario">
+    <main class="container-login-registro position-fixed d-flex bg-titulo">
+        <section class="main-login-registro position-fixed d-flex flex-column align-items-center justify-content-center">
+            <div class="formulario d-flex justify-content-center align-items-center flex-column color-white">
                 <h1>Criar Conta</h1>
                 <form action="/registro" method="POST">
                     <label for="nome" >Nome Completo:</label>
@@ -51,21 +45,21 @@
                         </div>
                     </div>
                     
-                    <button class="form" type="submit">Registrar-se</button>
+                    <button class="form color-white" type="submit">Registre-se</button>
                 </form>
     
-                <div class="registro-link">
-                    <p>Já possui uma conta? <a href="login.html" aria-label="Ir para a página de registro">Faça Login</a></p>
+                <div class="registro-login-link color-white text-center">
+                    <p>Não possui uma conta? <a class="color-white" href="login.html" aria-label="Ir para a página de registro">Fazer Login</a></p>
                 </div>
-            </section>
-        </main>
+            </div>
+        </section>
 
-        <div class="logo-background logo-style">
+        <section class="logo-login-registro logo-background logo-style d-flex justify-content-center align-items-center">
             <a href="index.html" aria-label="Voltar para a página inicial">
                 <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu">
             </a>
-        </div>
-    </div>
+        </section>
+    </main>
     
 </body>
 </html>

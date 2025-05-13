@@ -115,6 +115,20 @@
         width: 280px;
     }
 
+    .logo-login-registro {
+        width: 55%;
+        height: 100vh;
+        margin-left: 45%;
+        z-index: 999;
+        position: static;
+    }
+
+    .logo-login-registro img {
+        border-radius: 50%;
+        opacity: 0.8;
+        width: 400px;
+    }
+
     .login-registro>div {
         position: fixed;
         right: 20px;
@@ -161,12 +175,25 @@
         flex-direction: row;
     }
 
-    main {
+    #container>main {
         margin-left: 280px;
     }
+
+    .bg-titulo {
+        height: 400px;
+    }
     
+    .home, .container-login-registro {
+        height: 100vh;
+    }
+
     .titulo h1 {
+        margin-top: -70px;
         font-size: 55px; 
+    }
+
+    .subtitulo h2 {
+        font-size: 23px;
     }
     
     .titulo span {
@@ -181,9 +208,9 @@
         margin-left: 40px;   
     }
     
-    .comprar-ingresso-home a {
-        padding: 15px;
-        font-size: 15px;
+    .comprar-ingresso a {
+        padding: 10px;
+        font-size: 13px;
         border-radius: 10px;
     }
     
@@ -193,5 +220,9 @@
     
     .informacoes-home a {
         width: 25%;
-    }    
+    }  
+    
+    #div-como-chegar>.iframe iframe {
+        height: 400px;
+    }
 }

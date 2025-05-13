@@ -1,27 +1,20 @@
-function exibirDiv(div) {
-    const divAExibir = document.getElementById(div)
-    const style = (div === 'nav-links-lista') ? 'block' : 'flex'
+function exibirDiv(id) {
+    const divAExibir = document.getElementById(id)
+    const style = (id === 'nav-links-lista') ? 'block' : 'flex'
     divAExibir.style.display = (divAExibir.style.display === 'none') ? style : 'none'
 }
 
 function exibirCard(cardClass) {
     const cardAExibir = document.getElementsByClassName(cardClass)[0];
-    if (!cardAExibir) return;
-
     const botaoLer = cardAExibir.querySelector('a');
 
-    if (cardAExibir.classList.contains('text-card-exibido')) {
-        cardAExibir.classList.remove('text-card-exibido');
+    if (cardAExibir.classList.contains('card-exibido')) {
+        cardAExibir.classList.remove('card-exibido');
         botaoLer.innerHTML = 'Ler mais';
     } else {
-        cardAExibir.classList.add('text-card-exibido');
+        cardAExibir.classList.add('card-exibido');
         botaoLer.innerHTML = 'Ler menos';
     }
-}
-
-function exibirQrCode(cardClass) {
-    const cardAExibir = document.getElementsByClassName(cardClass)[0];
-    if (!cardAExibir) return;
 }
 
 async function carregamentoDinamico() {
