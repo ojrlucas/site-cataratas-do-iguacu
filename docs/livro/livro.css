@@ -1,4 +1,4 @@
-@page { size: A4; margin: 22mm 20mm 24mm 20mm; @bottom-center { content: counter(page); font: 600 9pt Inter, sans-serif; color: #006ca6; } @bottom-left { content: "Cataratas do Iguaçu · Livro do Sistema"; font: 8pt Inter, sans-serif; color: #7a8d9b; } @bottom-right { content: "Homenagem de um fã"; font: 8pt Inter, sans-serif; color: #7a8d9b; } }
+@page { size: A4; margin: 22mm 20mm 24mm 20mm; @bottom-center { content: counter(page); font: 600 9pt Inter, sans-serif; color: #006ca6; } @bottom-left { content: "Cataratas do Iguaçu · Documentação de Sistema v2.0"; font: 8pt Inter, sans-serif; color: #7a8d9b; } @bottom-right { content: "Homenagem de um fã"; font: 8pt Inter, sans-serif; color: #7a8d9b; } }
 @page :first { margin: 0; @bottom-center { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
 @page semnum { @bottom-center { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
 :root { --azul: #006ca6; --escuro: #013a68; --medio: #004d8b; --verde: #4caf50; --verde-e: #036800; --claro: #e9eff3; --texto: #1d2a35; --suave: #5b6b78; }
@@ -92,3 +92,49 @@ html { font-size: 10pt; }
 p { margin-bottom: 7pt; }
 .cap-abre { padding: 11mm 12mm 6mm; margin-bottom: 12pt; }
 h2.s { margin-top: 13pt; }
+
+@page parte { margin: 0; @bottom-center { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
+.parte { page: parte; width: 210mm; height: 297mm; position: relative; color: #fff; overflow: hidden; break-before: page; break-after: page; background: var(--escuro); }
+.parte .foto { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.parte .veu { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(1,40,74,.15) 0%, rgba(1,40,74,.35) 45%, rgba(1,25,46,.94) 100%); }
+.parte .conteudo { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 24mm 30mm; }
+.parte .rotulo { font-size: 11pt; letter-spacing: 6pt; text-transform: uppercase; color: #b7f0bb; font-weight: 700; }
+.parte h1 { margin: 6pt 0 8pt; font-size: 38pt; font-weight: 800; line-height: 1.08; }
+.parte p { text-align: left; font-size: 12.5pt; font-weight: 300; max-width: 140mm; margin: 0 0 14pt; opacity: .95; }
+.parte ul { list-style: none; margin: 0; padding: 12pt 0 0; border-top: 2pt solid var(--verde); font-size: 10.5pt; }
+.parte li { margin-bottom: 3pt; }
+.pri.c { background: #eee6ff; color: #54339c; }
+.leg { display: block; text-align: center; font-size: 8.5pt; color: var(--suave); font-style: italic; margin: -6pt 0 12pt; }
+.uc { margin: 10pt 0 14pt; break-inside: avoid; border: 1pt solid #cfdbe5; border-radius: 8pt; overflow: hidden; }
+.uc-t { background: var(--azul); color: #fff; padding: 6pt 10pt; font-size: 10.5pt; }
+.uc-t b { color: #b7f0bb; margin-right: 6pt; }
+table.uct { margin: 0; font-size: 8.8pt; }
+table.uct th { width: 24%; background: #eaf2f8; color: var(--escuro); vertical-align: top; border-bottom: 1pt solid #d6e2eb; }
+table.uct td { background: #fff !important; }
+table.uct ol, table.uct ul { margin: 0; padding-left: 13pt; }
+table.uct li { margin-bottom: 1.5pt; }
+td ul { margin: 0; padding-left: 12pt; }
+.cap-abre { background-size: cover !important; background-position: center !important; }
+.cap-abre .num { color: #b7f0bb; opacity: 1; font-weight: 700; }
+.ctrl { width: 100%; }
+.ctrl td:first-child { width: 28%; font-weight: 700; color: var(--escuro); background: #eaf2f8 !important; }
+.sub-doc { font-size: 9.5pt; color: var(--suave); }
+figure.rec img { height: 92mm; }
+html { font-size: 9.7pt; line-height: 1.55; }
+p { margin-bottom: 6pt; }
+td { padding: 4.2pt 6pt; }
+th { padding: 5pt 6pt; }
+table { margin: 6pt 0 9pt; font-size: 8.5pt; }
+h2.s { margin: 11pt 0 5pt; font-size: 13.5pt; }
+h3.s { margin: 9pt 0 3pt; }
+.cap-abre { padding: 9mm 11mm 5mm; margin-bottom: 10pt; }
+.cap-abre h1 { font-size: 25pt; }
+.toc li { padding: 2.6pt 0 !important; font-size: 9.5pt !important; }
+.toc h2 { margin-bottom: 8pt; }
+.folha .aviso-grande p { font-size: 8.8pt; line-height: 1.45; margin-bottom: 4pt; }
+.ctrl td { padding: 3pt 6pt; font-size: 8.5pt; }
+figure { margin: 7pt 0 10pt; }
+figure img { max-height: 98mm; }
+figure.par img { max-height: 98mm; }
+figure.rec img { height: 84mm; }
+.destaque { padding: 7pt 10pt; margin: 8pt 0; }
