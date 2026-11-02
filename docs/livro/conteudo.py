@@ -190,7 +190,7 @@ RNF = [
  ('RNF13','Segurança','Cabeçalhos de segurança e CSP restritiva.','CSP default-src self; frame-ancestors none; nosniff; Referrer-Policy no-referrer','Inspeção dos cabeçalhos'),
  ('RNF14','Segurança','Infraestrutura endurecida.','Usuário não root, back-end somente leitura, cap_drop ALL, no-new-privileges, nginx sem privilégios','Inspeção do compose e dos Dockerfiles'),
  ('RNF15','Segurança','Segredos obrigatórios em produção.','Sem JWT_SECRET de 32+ caracteres o servidor não inicia','Execução com e sem a variável'),
- ('RNF16','Manutenibilidade','Código modular, tipado e testado, sem comentários.','Back-end: ~600 linhas em 6 módulos; front-end Angular standalone; 5 testes de API/CLI e 6 cenários E2E (12 execuções)','Revisão; npm test e playwright test'),
+ ('RNF16','Manutenibilidade','Código modular, tipado e testado, sem comentários.','Back-end em 55 arquivos de até 58 linhas; front-end Angular standalone em componentes pequenos; 12 testes de API, CLI e unidade e 6 cenários E2E (12 execuções); ESLint nos três projetos','Revisão; npm test e playwright test'),
  ('RNF17','Portabilidade','Execução reproduzível por contêineres.','docker compose up --build sobe frontend, backend e mailpit','Configuração do compose (build não validado no sandbox)'),
  ('RNF18','Operabilidade','Diagnóstico simples.','GET /api/health; logs no stdout; erros 500 registrados sem vazar detalhes ao cliente','Chamada ao endpoint e inspeção do código'),
  ('RNF19','Privacidade','Minimização e finalidade (LGPD).','Coleta apenas nome, e-mail, telefone e senha (hash); senhas nunca retornam pela API; dados fictícios','Revisão das rotas e do esquema'),
@@ -290,8 +290,12 @@ ADR = [
  ('ADR-07','Mailpit como SMTP de demonstração','Mostrar e-mails sem enviar nada à internet.','Mailhog, serviço real','Troca por SMTP real apenas com variáveis de ambiente.'),
  ('ADR-08','Contêineres endurecidos','Reduzir superfície de ataque.','Contêineres padrão','Back-end somente leitura; exige volume para /data.'),
  ('ADR-09','Dinheiro em centavos','Exatidão financeira.','Decimal em ponto flutuante','Conversão apenas na camada de apresentação.'),
+ ('ADR-11','Back-end em camadas (rotas, serviços, repositórios)','Evitar um arquivo monolítico e permitir testar regras sem HTTP e SQL sem regras.','Arquivo único, framework opinativo (NestJS)','Mais arquivos pequenos (o maior tem 58 linhas); dependências explícitas e testáveis.'),
+ ('ADR-12','Componentes de apresentação e estilos por responsabilidade','Páginas grandes e CSS global duplicado dificultavam a manutenção.','Componente único por página, CSS em um arquivo','Páginas orquestram; componentes pequenos recebem entradas e emitem eventos; um seletor, uma definição.'),
  ('ADR-10','CLI para superadmin','Não existir credencial padrão nem rota pública de promoção.','Usuário seed fixo, variável de ambiente','Operação exige acesso ao terminal; senha oculta no prompt.'),
 ]
+
+ADR.sort(key=lambda adr: int(adr[0].split('-')[1]))
 
 CAPS[9] = ('Arquitetura', 3, """
 <p>A arquitetura é descrita com o <strong>modelo C4</strong> (contexto, contêineres, componentes) e uma visão de implantação, atendendo ao princípio da ISO/IEC/IEEE 42010 de apresentar o sistema por <em>visões</em> voltadas às preocupações de cada parte interessada.</p>
@@ -304,7 +308,7 @@ CAPS[9] = ('Arquitetura', 3, """
  ['Mailpit','axllent/mailpit','Caixa de entrada de demonstração (UI na porta 8025).']]) + """
 <h2 class="s">9.2 Componentes da API (C4 nível 3)</h2>
 """ + diag.c4_componentes() + '<figcaption class="leg">Figura 9.2 · Componentes do back-end.</figcaption>' + """
-<p>A função <code>createApp({ db, jwtSecret, mailer, staticDir, rateLimitMax })</code> recebe suas dependências por <strong>injeção</strong>. Isso permite testar a API com banco em memória e um e-mail simulado, sem rede. O <code>server.js</code> apenas lê o ambiente e compõe as peças reais.</p>
+<p>A API segue o fluxo <strong>rota → serviço → repositório</strong>. As <em>rotas</em> só traduzem HTTP (validam a entrada, chamam o serviço e escolhem o código de resposta); os <em>serviços</em> concentram as regras de negócio e não conhecem Express; os <em>repositórios</em> são a única camada que escreve SQL. <em>Validators</em> (Zod) e <em>serializers</em> isolam o contrato da API do esquema do banco. A função <code>createApp({ db, jwtSecret, mailer, staticDir, rateLimitMax })</code> compõe as camadas por <strong>injeção de dependências</strong>, o que permite testar com banco em memória e e-mail simulado, sem rede. O <code>server.js</code> apenas lê o ambiente (<code>config/</code>) e liga as peças reais; a CLI reutiliza repositórios e o serviço de senhas.</p>
 <h2 class="s">9.3 Visão de implantação</h2>
 """ + diag.implantacao() + '<figcaption class="leg">Figura 9.3 · Implantação com Docker Compose.</figcaption>' + """
 <h2 class="s">9.4 Fluxo de uma compra</h2>
@@ -313,18 +317,41 @@ CAPS[9] = ('Arquitetura', 3, """
 """ + tab(['ID','Decisão','Contexto / motivo','Alternativas','Consequências'], [list(a) for a in ADR]) + """
 <h2 class="s">9.6 Estrutura do repositório</h2>
 <pre><code>site-cataratas-do-iguacu/
-├── docker-compose.yml        .env.example
-├── backend/   Dockerfile
-│   ├── src/   app.js  server.js  db.js  data.js  mailer.js  cli.js
-│   └── test/  api.test.js  cli.test.js
+├── docker-compose.yml   .env.example
+├── backend/   Dockerfile  eslint.config.js
+│   ├── src/
+│   │   ├── server.js  app.js  cli.js
+│   │   ├── config/        ambiente e constantes
+│   │   ├── database/      conexão, esquema e semente
+│   │   ├── repositories/  SQL (usuários, pedidos, tipos, atividades, métricas)
+│   │   ├── services/      regras de negócio
+│   │   ├── validators/    esquemas Zod     serializers/  formato da API
+│   │   ├── middlewares/   segurança, limites, autenticação, erros
+│   │   ├── routes/        públicas, auth, pedidos, admin
+│   │   ├── email/         transporte e template     cli/  comandos
+│   │   └── shared/        erros HTTP, validação, datas, slug
+│   └── test/  api · cli · unit
+├── frontend/  Dockerfile  nginx.conf  eslint.config.js
+│   ├── public/  imagens/  tema-init.js
+│   └── src/   styles/ (13 arquivos por responsabilidade)   legacy/
+│       └── app/  core/ (models, services, interceptors, guards, utils)
+│                 shared/ (components, directives)   layout/ (nav, footer)
+│                 pages/ (home, sobre, lazer, ingressos, login, registro, admin)
 ├── e2e/       playwright.config.js  tests/fluxos.spec.js
 ├── .github/workflows/ci.yml
-├── frontend/  Dockerfile  nginx.conf  proxy.conf.json
-│   ├── public/  imagens/  tema-init.js
-│   └── src/app/ core/ (api, auth, guards, modal, tema, toast, reveal, contar)
-│                layout/ (nav, footer)   pages/ (home, sobre, lazer,
-│                ingressos, login, registro, admin)
 └── docs/livro/  fontes e PDF deste documento</code></pre>
+<h2 class="s">9.7 Convenções de código e qualidade estática</h2>
+""" + tab(['Prática','Como é aplicada'], [
+ ['Sem comentários no código','Nomes expressivos e funções pequenas substituem comentários; o ESLint falha a análise se houver comentário de linha ou TODO (no-inline-comments, no-warning-comments).'],
+ ['Responsabilidade única','Um arquivo por responsabilidade: o maior arquivo do back-end tem 58 linhas e o do front-end, 97.'],
+ ['Camadas e dependências','Rotas não acessam o banco; serviços não conhecem HTTP; repositórios são o único ponto de SQL.'],
+ ['Injeção de dependências','createApp e os serviços recebem suas dependências, permitindo testes com banco em memória e e-mail simulado.'],
+ ['Constantes nomeadas','Limites, prazos, custos e políticas em config/constants.js e constantes de módulo, sem números mágicos.'],
+ ['Erros tipados','HttpError com fábricas (badRequest, notFound, conflict...) e um único tratador de erros.'],
+ ['Componentes pequenos (front-end)','Páginas orquestram; componentes de apresentação recebem entradas e emitem eventos; template em arquivo próprio.'],
+ ['CSS sem duplicação','Cada seletor tem uma única definição; 13 arquivos por responsabilidade e variáveis para tema.'],
+ ['Análise estática','ESLint no back-end, no front-end (com regras de acessibilidade de template) e no E2E, executado no CI.'],
+ ['Regressão visual','Comparação pixel a pixel de 56 capturas antes e depois da refatoração do front-end: zero diferenças.']]) + """
 """)
 
 CAPS[10] = ('Front-end Angular', 3, """
@@ -333,26 +360,36 @@ CAPS[10] = ('Front-end Angular', 3, """
 """ + tab(['Rota','Componente','Acesso'], [
  ['/','Home','Público'],['/sobre','Sobre','Público'],['/lazer','Lazer','Público'],['/ingressos','Ingressos','Público (compra exige login)'],
  ['/login, /registre-se','Login, Registro','Público, sem menu lateral'],['/admin','Admin','Superadmin (adminGuard)']]) + """
-<h2 class="s">10.2 Módulos centrais</h2>
+<h2 class="s">10.2 Organização em camadas</h2>
+""" + tab(['Pasta','Conteúdo'], [
+ ['core/models','Interfaces TypeScript do contrato da API.'],
+ ['core/services','Api (HTTP tipado), Auth (sessão), Tema, Toast e Redirecionamento.'],
+ ['core/interceptors, guards, utils','Interceptor do JWT, guarda do painel e utilitários (armazenamento, erros, formulários, redirecionamento seguro).'],
+ ['shared/components','Modal, toasts, botão de tema, alternar senha e hero do parque, todos reutilizáveis.'],
+ ['shared/directives','Revelação ao rolar e contador animado.'],
+ ['layout','Menu lateral/superior e rodapé.'],
+ ['pages','Uma pasta por rota; Ingressos e Admin se dividem em componentes menores (bilhete, lista de pedidos, modais de compra e comprovante; abas de resumo, pedidos, usuários, ingressos e lazer).']]) + """
+<h2 class="s">10.3 Módulos centrais</h2>
 """ + tab(['Arquivo','Função'], [
- ['core/api.ts','Serviço HTTP tipado com todos os endpoints e as interfaces de dados.'],
- ['core/auth.ts','Sessão em sinais, login, cadastro, logout, atualização do perfil e interceptor (anexa JWT, encerra a sessão em 401).'],
- ['core/guards.ts','adminGuard e destinoSeguro (impede redirecionamento aberto).'],
- ['core/modal.ts','Janela modal acessível: Esc, clique no fundo, papel de diálogo.'],
- ['core/tema.ts','Alternância e persistência do tema claro/escuro.'],
- ['core/toast.ts','Avisos flutuantes com fechamento automático.'],
- ['core/reveal.ts, contar.ts','Revelação ao rolar (IntersectionObserver) e contador numérico animado.'],
- ['layout/nav.ts, footer.ts','Menu lateral/superior com item ativo; rodapé com contatos e aviso de fã.']]) + """
-<h2 class="s">10.3 Sistema de design</h2>
+ ['core/services/api.ts','Serviço HTTP tipado com todos os endpoints e as interfaces de dados.'],
+ ['core/services/auth.ts','Sessão em sinais, login, cadastro, logout e atualização do perfil.'],
+ ['core/interceptors/auth.interceptor.ts','Anexa o JWT às chamadas /api e encerra a sessão em respostas 401.'],
+ ['core/guards/admin.guard.ts, core/utils/safe-redirect.ts','Guarda do painel e destinoSeguro (impede redirecionamento aberto).'],
+ ['shared/components/modal','Janela modal acessível: Esc, clique no fundo, papel de diálogo.'],
+ ['core/services/tema.ts','Alternância e persistência do tema claro/escuro.'],
+ ['core/services/toast.ts','Avisos flutuantes com fechamento automático.'],
+ ['shared/directives','Revelação ao rolar (IntersectionObserver) e contador numérico animado.'],
+ ['layout/nav, layout/footer','Menu lateral/superior com item ativo; rodapé com contatos e aviso de fã.']]) + """
+<h2 class="s">10.4 Sistema de design</h2>
 <div class="duas">
-<div class="cartao"><h4>Cores e tokens</h4><ul><li>Azuis #0a7ab8, #006ca6, #004d8b e #013a68 (águas)</li><li>Verdes #58c162, #2f9a46 e #036800 (mata)</li><li>Variáveis CSS de superfície, texto, borda e chip, redefinidas no tema escuro</li></ul></div>
+<div class="cartao"><h4>Cores e tokens</h4><ul><li>Azuis #0a7ab8, #006ca6, #004d8b e #013a68 (águas)</li><li>Verdes #58c162, #2f9a46 e #036800 (mata)</li><li>Variáveis CSS de superfície, texto, borda e chip, redefinidas no tema escuro</li><li>13 arquivos de estilo por responsabilidade (tokens, layout, botões, cartões, modal, formulários, admin, autenticação, feedback, tema, animações e tema escuro)</li></ul></div>
 <div class="cartao"><h4>Tipografia</h4><ul><li>Fraunces (serifa) em títulos</li><li>Inter (variável) no texto e na interface</li><li>Fontes empacotadas no build, sem CDN</li></ul></div>
 <div class="cartao"><h4>Componentes</h4><ul><li>Cartão com imagem, degradê e título sobreposto</li><li>Bilhete com furos e linha pontilhada</li><li>Modal, botões, abas em cápsula, tabelas, métricas, toasts</li></ul></div>
 <div class="cartao"><h4>Movimento</h4><ul><li>Entrada escalonada ao rolar</li><li>Transição entre páginas, esqueletos, contadores</li><li>Tudo desativado com movimento reduzido</li></ul></div>
 </div>
-<h2 class="s">10.4 Responsividade</h2>
+<h2 class="s">10.5 Responsividade</h2>
 <p>As grades usam <code>repeat(auto-fill, minmax(min(100%, 290px), 1fr))</code>; contêineres têm <code>min-width: 0</code> e <code>overflow-wrap: anywhere</code>; tabelas rolam dentro do próprio quadro; imagens de cartão usam <code>object-fit: cover</code>. Assim, nenhum conteúdo ultrapassa os limites do seu cartão. Verificado sem rolagem horizontal em 390 px e 1280 px.</p>
-<h2 class="s">10.5 Tema claro e escuro</h2>
+<h2 class="s">10.6 Tema claro e escuro</h2>
 <p>O serviço <code>Tema</code> grava <code>data-tema</code> na raiz do documento e a escolha em <code>localStorage</code>. O script externo <code>tema-init.js</code> (compatível com a CSP, que proíbe scripts inline) define o tema antes do Angular iniciar, evitando o flash. A troca usa uma transição curta de cores.</p>
 """)
 
@@ -470,6 +507,8 @@ CAPS[15] = ('Estratégia e plano de testes', 4, """
 """ + tab(['Nível','Abordagem','Ferramenta','Situação'], [
  ['API (integração)','Servidor real em porta efêmera, banco em memória, e-mail simulado','node --test (nativo)','Automatizado, no repositório'],
  ['CLI','Execução da função run() contra banco em memória','node --test','Automatizado, no repositório'],
+ ['Unidade (utilitários)','Slug, datas, senhas, ambiente, validação e argumentos da CLI','node --test','Automatizado, no repositório'],
+ ['Análise estática','ESLint (back-end, front-end com regras de acessibilidade de template, E2E)','ESLint, angular-eslint','Automatizado; executado no CI'],
  ['Interface ponta a ponta','Cadastro, login com retorno, compra, QR, painel, tema e responsividade, em desktop (1280 px) e celular (390 px)','Playwright (Chromium), pasta e2e','Automatizado, no repositório'],
  ['Integração contínua','Testes da API, build do Angular, ponta a ponta, npm audit, docker compose config e build','GitHub Actions (.github/workflows/ci.yml)','Definido; executa a cada push, ainda não executado no GitHub'],
  ['Infraestrutura','Build das imagens e subida do compose','Docker (no CI)','Não validado no ambiente de entrega (sem acesso ao registro npm); coberto pelo CI']]) + """
@@ -485,7 +524,11 @@ CAPS[15] = ('Estratégia e plano de testes', 4, """
  ['TC13','Criar tipo; entrada inválida','201 com slug; 400','RF20'],['TC14','Desativar tipo','Some da vitrine pública','RF20; RN08'],
  ['TC15','Criar e excluir atividade','Lista pública reflete (7, depois 6)','RF21'],
  ['TC16','CLI: criar, atualizar, promover, rebaixar, listar','Papéis e dados conforme comandos','RF22; RN12'],
- ['TC17','CLI: senha curta; último superadmin; usuário inexistente','Erros específicos','RF22; RN02, RN14']]) + """
+ ['TC17','CLI: senha curta; último superadmin; usuário inexistente','Erros específicos','RF22; RN02, RN14'],
+ ['TC18','Unidade: slugify e uniqueSlug','Sem acentos, nunca vazio, contador em colisão','RF20, RF21'],
+ ['TC19','Unidade: senhas e usuário inexistente','Hash confere; inexistente nunca autentica','RN02; RNF09'],
+ ['TC20','Unidade: ambiente em produção','Exige JWT_SECRET de 32+ caracteres','RNF15'],
+ ['TC21','Unidade: validate e parseArguments','HttpError 400 com campos; opção sem valor falha','RN01-RN03']]) + """
 <h2 class="s">15.3 Cenários ponta a ponta (Playwright)</h2>
 """ + tab(['ID','Cenário','Verificações','RF'], [
  ['ES01','Páginas públicas','Seis rotas carregam sem erro de console e sem rolagem horizontal','RF01-RF05; OB2'],
@@ -497,12 +540,15 @@ CAPS[15] = ('Estratégia e plano de testes', 4, """
 <p>Cada cenário roda em dois perfis (desktop e celular), totalizando 12 execuções.</p>
 <h2 class="s">15.4 Resultado</h2>
 <pre><code>cd backend &amp;&amp; npm test
-# tests 5 · pass 5 · fail 0
+tests 12 · pass 12 · fail 0
+
+cd backend &amp;&amp; npm run lint
+cd frontend &amp;&amp; npm run lint
 
 cd e2e &amp;&amp; npx playwright test
-# 12 passed (6 cenários × 2 perfis)</code></pre>
+12 passed (6 cenários × 2 perfis)</code></pre>
 <h2 class="s">15.5 Defeitos encontrados pelos testes</h2>
-<p>A verificação em navegador real revelou e corrigiu defeitos que a leitura do código não mostrava: o hero sobrepondo o menu, ícones do botão de tema deslocados por CSS legado, campos do login acinzentados no tema escuro e rótulos acessíveis (<code>aria-label</code>) que substituíam o texto visível de links e campos, contrariando o critério 2.5.3 da WCAG (rótulo no nome).</p>
+<p>A verificação em navegador real revelou e corrigiu defeitos que a leitura do código não mostrava: o hero sobrepondo o menu, ícones do botão de tema deslocados por CSS legado, campos do login acinzentados no tema escuro e rótulos acessíveis (<code>aria-label</code>) que substituíam o texto visível de links e campos, contrariando o critério 2.5.3 da WCAG (rótulo no nome). A análise estática encontrou ainda asserções não nulas no redirecionamento seguro e um rótulo sem controle associado no seletor de quantidade, ambos corrigidos.</p>
 <h2 class="s">15.6 Lacunas e plano</h2>
 <ul><li>Executar o fluxo de CI no GitHub e acompanhar o resultado a cada alteração.</li><li>Testes de carga e de segurança (SAST); a varredura de dependências (npm audit) já faz parte do CI.</li><li>Auditoria de acessibilidade (WCAG 2.2) com ferramentas automatizadas e leitor de tela.</li></ul>
 """)
@@ -535,10 +581,9 @@ CAPS[17] = ('Implantação e operação', 4, """
  ['mailpit','axllent/mailpit','8025','Caixa de entrada de demonstração.']]) + """
 <h2 class="s">17.2 Execução</h2>
 <pre><code>cp .env.example .env
-# edite JWT_SECRET (openssl rand -hex 32)
 docker compose up --build
 docker compose exec backend node src/cli.js superadmin criar --email voce@exemplo.com --nome "Seu Nome"</code></pre>
-<p>Site em <code>http://localhost:8080</code> e e-mails de demonstração em <code>http://localhost:8025</code>.</p>
+<p>Antes de subir, edite o <code>.env</code> e defina <code>JWT_SECRET</code> (por exemplo, com <code>openssl rand -hex 32</code>). Site em <code>http://localhost:8080</code> e e-mails de demonstração em <code>http://localhost:8025</code>.</p>
 <h2 class="s">17.3 Variáveis de ambiente</h2>
 """ + tab(['Variável','Obrigatória','Descrição'], [
  ['JWT_SECRET','Sim (produção)','Segredo de assinatura; 32 caracteres ou mais'],['PORT','Não','Porta publicada do site (8080)'],
@@ -583,6 +628,7 @@ CAPS[18] = ('Experiência do usuário e acessibilidade', 4, """
  ['Tamanho de alvos e reflow','Botões de 38 a 44 px; layout fluido sem rolagem horizontal','Aplicado'],
  ['Nome acessível contém o texto visível (2.5.3)','aria-label redundantes removidos; links e campos usam o texto visível ou label','Aplicado'],
  ['Operação por teclado','Botão de menu e "Esqueceu sua senha?" focáveis e acionáveis por Enter','Aplicado'],
+ ['Rótulos associados a controles (1.3.1, 4.1.2)','Grupo de quantidade rotulado por aria-labelledby; regras de acessibilidade de template no ESLint','Aplicado'],
  ['Contraste de cores','Paleta com texto claro sobre azul escuro e escuro sobre claro','Verificação visual; medição formal pendente'],
  ['Auditoria com leitor de tela','—','Pendente']]) + nota('Este documento não declara conformidade formal com a WCAG. As práticas acima foram aplicadas e inspecionadas, e a auditoria completa consta como evolução.', 'alerta'))
 
@@ -603,7 +649,7 @@ CAPS[19] = ('Riscos residuais, limitações e evolução', 4, """
 <div class="cartao"><h4>Engenharia</h4><ul><li>Integração contínua com testes ponta a ponta</li><li>PostgreSQL e migrações</li><li>Cookie HttpOnly, CSRF e HSTS</li><li>Observabilidade e logs estruturados</li></ul></div>
 </div>
 <h2 class="s">19.3 Lições do projeto</h2>
-<ul><li>Documentar requisitos com critérios verificáveis tornou os testes diretos.</li><li>Medir e verificar em navegador real antes de afirmar: o build apontou imagens de 15 MB (agora centenas de kB) e a interface revelou defeitos invisíveis na leitura do código.</li></ul>
+<ul><li>Documentar requisitos com critérios verificáveis tornou os testes diretos.</li><li>Medir e verificar em navegador real antes de afirmar: o build apontou imagens de 15 MB (agora centenas de kB) e a interface revelou defeitos invisíveis na leitura do código.</li><li>Refatorar com rede de segurança: testes, E2E e comparação visual pixel a pixel permitiram reorganizar todo o código sem alterar o comportamento.</li><li>Automatizar o estilo: regras de lint impedem a volta de comentários, duplicações e problemas de acessibilidade.</li></ul>
 """)
 
 APEND = {

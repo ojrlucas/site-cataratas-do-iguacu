@@ -1,0 +1,9 @@
+<div class="toasts" aria-live="polite">
+  @for (aviso of toast.avisos(); track aviso.id) {
+    <div class="toast" [class.erro]="aviso.tipo === 'erro'" role="status">
+      <i class="bi" [class.bi-check-circle-fill]="aviso.tipo === 'ok'" [class.bi-exclamation-triangle-fill]="aviso.tipo === 'erro'"></i>
+      <span>{{ aviso.texto }}</span>
+      <button type="button" (click)="toast.fechar(aviso.id)" aria-label="Fechar aviso"><i class="bi bi-x-lg"></i></button>
+    </div>
+  }
+</div>

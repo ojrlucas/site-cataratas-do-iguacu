@@ -1,0 +1,42 @@
+<app-hero-parque>
+  <div class="comprar-ingresso mt-4">
+    <a class="text-uppercase text-decoration-none color-white fw-bold" routerLink="/ingressos">COMPRAR INGRESSO</a>
+  </div>
+</app-hero-parque>
+
+<section class="pagina">
+  <p class="eyebrow">Experiências</p>
+  <h2 class="secao-titulo"><b>lazer?</b> o lugar é aqui!</h2>
+  <p class="secao-sub">Escolha uma experiência e descubra o Parque Nacional do Iguaçu de um jeito diferente.</p>
+
+  @if (erro()) { <p class="erro-pagina">Não foi possível carregar as atividades.</p> }
+  <div class="grade">
+    @if (carregando()) {
+      @for (esqueleto of esqueletos; track esqueleto) { <div class="esqueleto"></div> }
+    }
+    @for (atividade of atividades(); track atividade.id; let i = $index) {
+      <article class="cartao" appReveal [style.--i]="i">
+        <div class="cartao-img">
+          <img [src]="atividade.imagem" [alt]="atividade.alt" loading="lazy" />
+          <h3>{{ atividade.titulo }}</h3>
+        </div>
+        <div class="cartao-corpo">
+          <p class="cartao-texto">{{ atividade.descricao }}</p>
+          <div class="cartao-rodape">
+            <button type="button" class="btn-cpi bloco" (click)="abrir(atividade)">Ler mais <i class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>
+      </article>
+    }
+  </div>
+</section>
+
+@if (aberta(); as atividade) {
+  <app-modal [rotulo]="atividade.titulo" (fechar)="fechar()">
+    <div class="modal-img"><img [src]="atividade.imagem" [alt]="atividade.alt" /><h2>{{ atividade.titulo }}</h2></div>
+    <div class="modal-corpo">
+      <p>{{ atividade.descricao }}</p>
+      <a routerLink="/ingressos" class="btn-cpi verde bloco">Garantir meu ingresso</a>
+    </div>
+  </app-modal>
+}

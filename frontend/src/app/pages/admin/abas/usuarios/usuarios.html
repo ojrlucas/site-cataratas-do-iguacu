@@ -1,0 +1,22 @@
+@if (erro()) { <p class="msg-erro">{{ erro() }}</p> }
+<div class="tabela-wrap">
+  <table class="tabela">
+    <thead><tr><th>Nome</th><th>E-mail</th><th>Pedidos</th><th>Cadastro</th><th>Papel</th></tr></thead>
+    <tbody>
+      @for (usuario of usuarios(); track usuario.id) {
+        <tr>
+          <td>{{ usuario.nome }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.pedidos }}</td>
+          <td>{{ usuario.criadoEm | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <select [value]="usuario.papel" [disabled]="usuario.id === auth.usuario()?.id" (change)="alterarPapel(usuario, $any($event.target).value)" [attr.aria-label]="'Papel de ' + usuario.nome">
+              <option value="usuario">Usuário</option>
+              <option value="superadmin">Superadmin</option>
+            </select>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

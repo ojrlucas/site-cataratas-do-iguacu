@@ -1,0 +1,4 @@
+<button type="button" class="tema-btn" (click)="tema.alternar()" [attr.aria-label]="tema.atual() === 'escuro' ? 'Ativar modo claro' : 'Ativar modo escuro'" [attr.aria-pressed]="tema.atual() === 'escuro'" title="Alternar tema">
+  <i class="bi sol bi-sun-fill"></i>
+  <i class="bi lua bi-moon-stars-fill"></i>
+</button>

@@ -1,0 +1,28 @@
+@if (!logado()) {
+  <div class="vazio">
+    <i class="bi bi-person-lock"></i>
+    <p>Para comprar e acompanhar seus ingressos, <a class="azul fw-bold" routerLink="/login" [queryParams]="{ returnUrl: '/ingressos' }">faça login</a> ou <a class="azul fw-bold" routerLink="/registre-se">registre-se</a>.</p>
+  </div>
+} @else if (pedidos().length === 0) {
+  <div class="vazio"><i class="bi bi-ticket-perforated"></i><p>Você ainda não possui pedidos.</p></div>
+} @else {
+  <div class="pedidos">
+    @for (pedido of pedidos(); track pedido.id) {
+      <div class="pedido">
+        <div class="pedido-info">
+          <strong>{{ pedido.codigo }}</strong>
+          <span>{{ pedido.quantidade }}x {{ pedido.tipoNome }} · visita em {{ pedido.dataVisita + 'T12:00:00' | date: 'dd/MM/yyyy' }}</span>
+          <span>Total: {{ pedido.totalCentavos / 100 | currency: 'BRL' }}</span>
+          <span>
+            @if (pedido.emailEnviado) { <span class="chip ok"><i class="bi bi-envelope-check-fill"></i> Comprovante enviado</span> }
+            @else { <span class="chip alerta"><i class="bi bi-envelope-exclamation-fill"></i> E-mail pendente</span> }
+          </span>
+        </div>
+        <div class="pedido-acoes">
+          <button type="button" class="btn-cpi pequeno" (click)="verQr.emit(pedido.id)"><i class="bi bi-qr-code"></i> QR Code</button>
+          <button type="button" class="btn-cpi claro pequeno" (click)="reenviar.emit(pedido.id)"><i class="bi bi-envelope"></i> Reenviar</button>
+        </div>
+      </div>
+    }
+  </div>
+}

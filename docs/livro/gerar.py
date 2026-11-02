@@ -35,7 +35,7 @@ def controle():
     return """<section class="folha" style="justify-content:flex-start"><h2 style="font-size:22pt;color:#013a68;margin:0 0 4pt;padding-bottom:6pt;border-bottom:3pt solid #4caf50">Controle do documento</h2>
 <table class="ctrl"><tbody>
 <tr><td>Título</td><td>Cataratas do Iguaçu · Documentação de Sistema (SRS, arquitetura, testes e operação)</td></tr>
-<tr><td>Código</td><td>CPI-DOC-001</td></tr><tr><td>Versão</td><td>2.1</td></tr><tr><td>Data</td><td>2 de novembro de 2026</td></tr>
+<tr><td>Código</td><td>CPI-DOC-001</td></tr><tr><td>Versão</td><td>2.2</td></tr><tr><td>Data</td><td>2 de novembro de 2026</td></tr>
 <tr><td>Situação</td><td>Versão final do portfólio</td></tr><tr><td>Autoria</td><td>Fã do parque, autor do projeto</td></tr>
 <tr><td>Produto descrito</td><td>Sistema web Cataratas do Iguaçu, v1.0 (front-end Angular, API Node.js, Docker)</td></tr>
 <tr><td>Normas de referência</td><td>ISO/IEC/IEEE 29148:2018, ISO/IEC/IEEE 42010:2022, ISO/IEC 25010, modelo C4</td></tr>
@@ -46,6 +46,7 @@ def controle():
 <tr><td class="id">0.1</td><td>2026-11-02</td><td>Migração do site HTML para Angular e criação do back-end Node.js.</td></tr>
 <tr><td class="id">1.0</td><td>2026-11-02</td><td>Primeiro livro: visão geral, requisitos, arquitetura e operação.</td></tr>
 <tr><td class="id">2.0</td><td>2026-11-02</td><td>Reestruturação conforme ISO/IEC/IEEE 29148 e 42010: partes, critérios de aceitação, casos de uso, diagramas C4 e UML, ADRs, modelo de ameaças, plano de testes e matriz de rastreabilidade.</td></tr><tr><td class="id">2.1</td><td>2026-11-02</td><td>Testes ponta a ponta versionados (Playwright), fluxo de CI e correção de acessibilidade (WCAG 2.5.3); rastreabilidade atualizada.</td></tr>
+<tr><td class="id">2.2</td><td>2026-11-02</td><td>Refatoração em camadas (back-end e front-end), estilos consolidados, ESLint nos três projetos, imagens otimizadas e 12 testes de API, CLI e unidade; ADR-11, ADR-12 e convenções de código.</td></tr>
 </tbody></table>
 <div class="aviso-grande" style="margin-top:14pt"><h2 style="font-size:14pt">Aviso importante</h2>
 <p>Este documento e o sistema que ele descreve foram criados por um <strong>fã</strong>, como <strong>homenagem</strong> às Cataratas do Iguaçu e ao Parque Nacional do Iguaçu, Patrimônio Mundial Natural da UNESCO. O sistema <strong>não representa um site real</strong> das Cataratas do Iguaçu, não é mantido, aprovado ou endossado pelo parque ou por qualquer órgão responsável e <strong>trata-se apenas de um portfólio</strong>. Ingressos, preços, pagamentos, e-mails e contatos são fictícios ou ilustrativos; nenhuma compra real é realizada. Para informações oficiais, consulte sempre os canais oficiais do parque. As fotografias pertencem ao acervo do projeto educacional original, sem créditos de autoria informados.</p></div></section>"""
@@ -61,7 +62,7 @@ def html(pag):
 <span class="selo">Projeto de fã · Portfólio</span>
 <h1>Cataratas<strong>do Iguaçu</strong></h1>
 <p class="sub">Documentação de sistema: especificação de requisitos, arquitetura, segurança, testes e operação</p>
-<div class="faixa"><b>Uma homenagem de fã.</b> Este sistema não representa o site real das Cataratas do Iguaçu nem o Parque Nacional do Iguaçu. É exclusivamente um projeto de portfólio, com dados e vendas fictícios. · Versão 2.1 · 2 de novembro de 2026</div>
+<div class="faixa"><b>Uma homenagem de fã.</b> Este sistema não representa o site real das Cataratas do Iguaçu nem o Parque Nacional do Iguaçu. É exclusivamente um projeto de portfólio, com dados e vendas fictícios. · Versão 2.2 · 2 de novembro de 2026</div>
 </div></section>
 {controle()}
 {toc(pag)}

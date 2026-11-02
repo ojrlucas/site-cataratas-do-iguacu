@@ -1,106 +1,88 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { Api, Pedido, PedidoQr, TipoIngresso, mensagemErro } from '../../core/api';
-import { Auth } from '../../core/auth';
-import { Modal } from '../../core/modal';
-import { Reveal } from '../../core/reveal';
-import { Toast } from '../../core/toast';
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { Pedido, PedidoQr, TipoIngresso } from '../../core/models/api.models';
+import { Api } from '../../core/services/api';
+import { Auth } from '../../core/services/auth';
+import { Toast } from '../../core/services/toast';
+import { mensagemErro } from '../../core/utils/http-error';
+import { HeroParque } from '../../shared/components/hero-parque/hero-parque';
+import { Bilhete } from './components/bilhete/bilhete';
+import { CompraModal } from './components/compra-modal/compra-modal';
+import { ComprovanteModal } from './components/comprovante-modal/comprovante-modal';
+import { ListaPedidos } from './components/lista-pedidos/lista-pedidos';
 
 @Component({
   selector: 'app-ingressos',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, Modal, Reveal],
+  imports: [HeroParque, Bilhete, ListaPedidos, CompraModal, ComprovanteModal],
   templateUrl: './ingressos.html',
 })
 export class Ingressos {
   private api = inject(Api);
   private router = inject(Router);
-  private fb = inject(FormBuilder);
-  auth = inject(Auth);
   private toast = inject(Toast);
-  carregando = signal(true);
+  readonly auth = inject(Auth);
+  readonly esqueletos = [1, 2];
 
   tipos = signal<TipoIngresso[]>([]);
   pedidos = signal<Pedido[]>([]);
+  carregando = signal(true);
   erro = signal('');
-  aviso = signal('');
   comprando = signal<TipoIngresso | null>(null);
-  comprovante = signal<{ qr: PedidoQr } | null>(null);
-  enviando = signal(false);
-  erroForm = signal('');
-  quantidade = signal(1);
-  total = computed(() => ((this.comprando()?.precoCentavos ?? 0) * this.quantidade()) / 100);
-  hoje = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-
-  form = this.fb.nonNullable.group({ dataVisita: [this.hoje, Validators.required] });
+  comprovante = signal<PedidoQr | null>(null);
 
   constructor() {
-    this.api.tipos().subscribe({ next: (t) => { this.tipos.set(t); this.carregando.set(false); }, error: () => { this.erro.set('Não foi possível carregar os ingressos.'); this.carregando.set(false); } });
+    this.carregarTipos();
     this.carregarPedidos();
   }
 
-  carregarPedidos() {
-    if (this.auth.logado()) this.api.pedidos().subscribe({ next: (p) => this.pedidos.set(p), error: () => {} });
-  }
-
-  comprar(t: TipoIngresso) {
+  comprar(tipo: TipoIngresso) {
     if (!this.auth.logado()) {
       this.router.navigate(['/login'], { queryParams: { returnUrl: '/ingressos' } });
       return;
     }
-    this.erroForm.set('');
-    this.quantidade.set(1);
-    this.form.reset({ dataVisita: this.hoje });
-    this.comprando.set(t);
+    this.comprando.set(tipo);
   }
 
-  alterarQuantidade(delta: number) {
-    this.quantidade.update((q) => Math.min(10, Math.max(1, q + delta)));
-  }
-
-  confirmar() {
-    const t = this.comprando();
-    if (!t || this.form.invalid || this.enviando()) return;
-    const dataVisita = this.form.getRawValue().dataVisita;
-    if (dataVisita < this.hoje) {
-      this.erroForm.set('A data da visita não pode estar no passado.');
-      return;
-    }
-    this.enviando.set(true);
-    this.api.criarPedido({ tipoId: t.id, quantidade: this.quantidade(), dataVisita }).subscribe({
-      next: (p) => {
-        this.enviando.set(false);
-        this.comprando.set(null);
-        this.carregarPedidos();
-        this.toast.ok('Compra confirmada! Confira seu e-mail.');
-        this.verQr(p.id);
-      },
-      error: (e) => {
-        this.enviando.set(false);
-        this.erroForm.set(mensagemErro(e));
-      },
-    });
+  aoConcluirCompra(pedido: Pedido) {
+    this.comprando.set(null);
+    this.carregarPedidos();
+    this.toast.ok('Compra confirmada! Confira seu e-mail.');
+    this.verQr(pedido.id);
   }
 
   verQr(id: number) {
-    this.aviso.set('');
     this.api.qrcode(id).subscribe({
-      next: (qr) => this.comprovante.set({ qr }),
-      error: (e) => this.erro.set(mensagemErro(e)),
+      next: (pedido) => this.comprovante.set(pedido),
+      error: (erro) => this.erro.set(mensagemErro(erro)),
     });
   }
 
   reenviar(id: number) {
-    this.aviso.set('');
     this.api.reenviar(id).subscribe({
-      next: (r) => {
-        this.toast.ok(r.mensagem);
+      next: (resposta) => {
+        this.toast.ok(resposta.mensagem);
         this.carregarPedidos();
-        const atual = this.comprovante();
-        if (atual) this.comprovante.set({ qr: { ...atual.qr, emailEnviado: true } });
+        this.comprovante.update((atual) => (atual ? { ...atual, emailEnviado: true } : atual));
       },
-      error: (e) => this.toast.erro(mensagemErro(e)),
+      error: (erro) => this.toast.erro(mensagemErro(erro)),
     });
+  }
+
+  private carregarTipos() {
+    this.api.tipos().subscribe({
+      next: (tipos) => {
+        this.tipos.set(tipos);
+        this.carregando.set(false);
+      },
+      error: () => {
+        this.erro.set('Não foi possível carregar os ingressos.');
+        this.carregando.set(false);
+      },
+    });
+  }
+
+  private carregarPedidos() {
+    if (!this.auth.logado()) return;
+    this.api.pedidos().subscribe({ next: (pedidos) => this.pedidos.set(pedidos), error: () => undefined });
   }
 }

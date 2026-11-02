@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "lint": "eslint ."
   },
   "devDependencies": {
-    "@playwright/test": "^1.63.0"
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0"
   }
 }

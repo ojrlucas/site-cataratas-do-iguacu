@@ -1,0 +1,50 @@
+<main class="container-login-registro position-fixed d-flex bg-titulo">
+  <section class="main-login-registro position-fixed d-flex flex-column align-items-center justify-content-center">
+    <div class="formulario d-flex justify-content-center align-items-center flex-column color-white">
+      <h1>Criar Conta</h1>
+      <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+        <label for="nome">Nome Completo:</label>
+        <input type="text" id="nome" formControlName="nome" autocomplete="name" />
+        @if (invalido('nome')) { <span class="erro-form">Informe o nome completo.</span> }
+
+        <div class="email-numero-container">
+          <div>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" autocomplete="email" />
+            @if (invalido('email')) { <span class="erro-form">Informe um e-mail válido.</span> }
+          </div>
+          <div class="numero">
+            <label for="numero">Número de Telefone:</label>
+            <input type="tel" id="numero" formControlName="telefone" placeholder="  (00) 90000-0000" autocomplete="tel" />
+            @if (invalido('telefone')) { <span class="erro-form">Telefone com DDD (10 ou 11 dígitos).</span> }
+          </div>
+        </div>
+
+        <div class="senha-confirmacao-container">
+          <div>
+            <label for="senha">Crie uma Senha:</label>
+            <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" autocomplete="new-password" />
+            @if (invalido('senha')) { <span class="erro-form">Entre 8 e 72 caracteres.</span> }
+          </div>
+          <div class="confirmacao-senha">
+            <label for="confirmacao-senha">Confirme sua Senha:</label>
+            <input [type]="verSenha() ? 'text' : 'password'" id="confirmacao-senha" formControlName="confirmacaoSenha" autocomplete="new-password" />
+            @if (senhasDiferentes()) { <span class="erro-form">As senhas não conferem.</span> }
+          </div>
+        </div>
+
+        <app-alternar-senha [(visivel)]="verSenha" />
+        @if (erro()) { <span class="erro-form">{{ erro() }}</span> }
+        <button class="form color-white" type="submit" [disabled]="enviando()">{{ enviando() ? 'Criando...' : 'Registre-se' }}</button>
+      </form>
+
+      <div class="registro-login-link color-white text-center">
+        <p>Já possui uma conta? <a class="color-white" routerLink="/login">Fazer Login</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="logo-login-registro logo-background logo-style d-flex justify-content-center align-items-center">
+    <a routerLink="/" aria-label="Voltar para a página inicial"><img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu" /></a>
+  </section>
+</main>

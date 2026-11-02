@@ -1,0 +1,57 @@
+.campo {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+  min-width: 0;
+}
+
+.campo label,
+.campo .rotulo-campo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--titulo);
+}
+
+.campo .rotulo-campo {
+  margin-top: 6px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  border: 1px solid var(--borda);
+  font-size: 14px;
+  background: var(--superficie);
+  color: var(--texto);
+  min-width: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(0, 108, 166, 0.2);
+}
+
+.campo .erro-campo {
+  color: #b00020;
+  font-size: 12px;
+}
+
+.campo-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 14px;
+}

@@ -1,0 +1,156 @@
+.btn-cpi {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  letter-spacing: 0.2px;
+  box-shadow: 0 1px 2px rgba(0, 76, 138, 0.2);
+  background: linear-gradient(135deg, #0a7ab8, #005f99);
+}
+
+.btn-cpi:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 76, 138, 0.3);
+  background: linear-gradient(135deg, #0a7ab8, #004d8b);
+}
+
+.btn-cpi.verde {
+  background: linear-gradient(135deg, #58c162, #2f9a46);
+}
+
+.btn-cpi.verde:hover {
+  background: linear-gradient(135deg, #58c162, #258039);
+  box-shadow: 0 8px 18px rgba(47, 154, 70, 0.4);
+}
+
+.btn-cpi.claro {
+  color: var(--titulo);
+  background: var(--chip);
+  box-shadow: none;
+}
+
+.btn-cpi.claro:hover {
+  background: #d3e3ee;
+  color: var(--titulo);
+  box-shadow: none;
+}
+
+.btn-cpi.perigo {
+  background: linear-gradient(135deg, #d94343, #b71c1c);
+}
+
+.btn-cpi.pequeno {
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.btn-cpi.bloco {
+  width: 100%;
+}
+
+.btn-cpi:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--chip);
+  color: var(--titulo);
+}
+
+.chip.ok {
+  background: #dff3e1;
+  color: #1b6b25;
+}
+
+.chip.alerta {
+  background: #fff1cf;
+  color: #8a5a00;
+}
+
+.seletor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--superficie-2);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.seletor button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+}
+
+.seletor button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.seletor output {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--titulo);
+}
+
+.resumo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  background: var(--superficie-2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 6px 0 16px;
+}
+
+.resumo strong {
+  font-size: 24px;
+  color: var(--titulo);
+}
+
+.btn-cpi i {
+  transition: transform 0.25s;
+}
+
+.btn-cpi:hover i.bi-arrow-right {
+  transform: translateX(4px);
+}
+
+.seletor button:hover:not(:disabled) {
+  transform: scale(1.1);
+  background: var(--azul-escuro);
+}
+
+.btn-cpi:active,
+.tema-btn:active,
+form button:active,
+.aba:active,
+.seletor button:active {
+  transform: scale(0.96);
+}

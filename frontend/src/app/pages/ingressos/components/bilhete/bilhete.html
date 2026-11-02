@@ -1,0 +1,14 @@
+<article class="ingresso" appReveal [style.--i]="indice()">
+  <div class="ingresso-topo">
+    <small>Parque Nacional do Iguaçu</small>
+    <h3>{{ tipo().nome }}</h3>
+  </div>
+  <div class="ingresso-furo"><i></i></div>
+  <div class="ingresso-corpo">
+    <div class="ingresso-preco">{{ tipo().precoCentavos / 100 | currency: 'BRL' }} <small>por pessoa</small></div>
+    <p>{{ tipo().descricao }}</p>
+    <button type="button" class="btn-cpi verde bloco" (click)="comprar.emit(tipo())">
+      <i class="bi bi-ticket-perforated-fill"></i> {{ logado() ? 'Comprar' : 'Entrar para comprar' }}
+    </button>
+  </div>
+</article>

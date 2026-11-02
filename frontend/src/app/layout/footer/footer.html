@@ -1,0 +1,25 @@
+<footer>
+  <div class="d-flex justify-content-around">
+    <section class="rodape-info">
+      <h3>CONTATO</h3>
+      <p>E-mail: {{ parque()?.contato?.email }}</p>
+      <p>Telefone: {{ parque()?.contato?.telefone }}</p>
+      <p>Whatsapp: {{ parque()?.contato?.whatsapp }}</p>
+    </section>
+    <section class="rodape-info">
+      <h3>LOCALIZAÇÃO</h3>
+      <p>{{ parque()?.localizacao?.endereco }}</p>
+      <p>{{ parque()?.localizacao?.cidade }}</p>
+      <p>CEP.: {{ parque()?.localizacao?.cep }}</p>
+    </section>
+    <section class="rodape-info">
+      <h3>REDES SOCIAIS</h3>
+      @for (rede of parque()?.redes; track rede.nome) {
+        <p><a [href]="rede.url" [attr.aria-label]="'Acessar o perfil de ' + rede.nome + ' das Cataratas do Iguaçu'" target="_blank" rel="noopener"><i class="bi {{ rede.icone }} me-2 text-decoration-none"></i> {{ rede.nome }}</a></p>
+      }
+    </section>
+  </div>
+  <section class="rodape-autoral mt-4 d-flex justify-content-center text-center">
+    <p>Projeto de portfólio criado por um fã em homenagem às Cataratas do Iguaçu. Não representa o site oficial do parque, não vende ingressos reais e não possui qualquer vínculo com o Parque Nacional do Iguaçu.</p>
+  </section>
+</footer>

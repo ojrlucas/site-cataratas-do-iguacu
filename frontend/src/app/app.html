@@ -1,0 +1,11 @@
+<app-toasts />
+@if (semLayout()) {
+  <app-tema class="tema-flutuante" />
+  <router-outlet />
+} @else {
+  <div id="container">
+    <app-nav />
+    <main><router-outlet /></main>
+  </div>
+  <div id="container"><app-footer /></div>
+}

@@ -1,0 +1,16 @@
+<app-modal rotulo="Comprovante do ingresso" (fechar)="fechar.emit()">
+  <div class="qr-bloco">
+    <img [src]="pedido().qrcode" [alt]="'QR Code do pedido ' + pedido().codigo" />
+    <h2>{{ pedido().codigo }}</h2>
+    <p>{{ pedido().quantidade }}x {{ pedido().tipoNome }} · {{ pedido().dataVisita + 'T12:00:00' | date: 'dd/MM/yyyy' }}</p>
+    @if (pedido().emailEnviado) {
+      <p class="msg-ok"><i class="bi bi-envelope-check-fill"></i> Enviamos o comprovante para o seu e-mail.</p>
+    } @else {
+      <p class="msg-erro">Não conseguimos enviar o e-mail agora. Você pode tentar novamente.</p>
+    }
+    <div class="qr-acoes">
+      <button type="button" class="btn-cpi claro" (click)="reenviar.emit(pedido().id)"><i class="bi bi-envelope"></i> Reenviar e-mail</button>
+      <button type="button" class="btn-cpi" (click)="fechar.emit()">Fechar</button>
+    </div>
+  </div>
+</app-modal>

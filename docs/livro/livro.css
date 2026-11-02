@@ -1,4 +1,4 @@
-@page { size: A4; margin: 22mm 20mm 24mm 20mm; @bottom-center { content: counter(page); font: 600 9pt Inter, sans-serif; color: #006ca6; } @bottom-left { content: "Cataratas do Iguaçu · Documentação de Sistema v2.1"; font: 8pt Inter, sans-serif; color: #7a8d9b; } @bottom-right { content: "Homenagem de um fã"; font: 8pt Inter, sans-serif; color: #7a8d9b; } }
+@page { size: A4; margin: 22mm 20mm 24mm 20mm; @bottom-center { content: counter(page); font: 600 9pt Inter, sans-serif; color: #006ca6; } @bottom-left { content: "Cataratas do Iguaçu · Documentação de Sistema v2.2"; font: 8pt Inter, sans-serif; color: #7a8d9b; } @bottom-right { content: "Homenagem de um fã"; font: 8pt Inter, sans-serif; color: #7a8d9b; } }
 @page :first { margin: 0; @bottom-center { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
 @page semnum { @bottom-center { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
 :root { --azul: #006ca6; --escuro: #013a68; --medio: #004d8b; --verde: #4caf50; --verde-e: #036800; --claro: #e9eff3; --texto: #1d2a35; --suave: #5b6b78; }

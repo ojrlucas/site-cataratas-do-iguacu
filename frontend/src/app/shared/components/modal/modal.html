@@ -1,0 +1,6 @@
+<div class="modal-fundo" (click)="fechar.emit()" role="dialog" aria-modal="true" [attr.aria-label]="rotulo()">
+  <div class="modal-cartao" [class.largo]="largo()" (click)="$event.stopPropagation()">
+    <button class="modal-fechar" type="button" (click)="fechar.emit()" aria-label="Fechar"><i class="bi bi-x-lg"></i></button>
+    <ng-content />
+  </div>
+</div>

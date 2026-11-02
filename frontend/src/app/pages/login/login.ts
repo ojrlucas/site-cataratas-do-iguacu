@@ -1,77 +1,69 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { destinoSeguro } from '../../core/guards';
-import { Api, mensagemErro } from '../../core/api';
-import { Auth } from '../../core/auth';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Api } from '../../core/services/api';
+import { Auth } from '../../core/services/auth';
+import { Redirecionamento } from '../../core/services/redirecionamento';
+import { campoInvalido } from '../../core/utils/forms';
+import { mensagemErro } from '../../core/utils/http-error';
+import { AlternarSenha } from '../../shared/components/alternar-senha/alternar-senha';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
-  template: `
-    <main class="container-login-registro position-fixed d-flex bg-titulo">
-      <section class="main-login-registro position-fixed d-flex flex-column align-items-center justify-content-center">
-        <div class="formulario d-flex justify-content-center align-items-center flex-column color-white">
-          <h1>Acessar Conta</h1>
-          <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
-            <label class="d-block" for="email">E-mail:</label>
-            <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" autocomplete="email" />
-            @if (inv('email')) { <span class="erro-form">Informe um e-mail válido.</span> }
-            <label class="d-block" for="senha">Senha:</label>
-            <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" placeholder="  Sua senha" autocomplete="current-password" />
-            @if (inv('senha')) { <span class="erro-form">Informe a senha.</span> }
-            <button type="button" class="ver-senha" (click)="verSenha.set(!verSenha())"><i class="bi" [class.bi-eye]="!verSenha()" [class.bi-eye-slash]="verSenha()"></i> {{ verSenha() ? 'Ocultar senha' : 'Mostrar senha' }}</button>
-
-            <div class="esqueceu-senha">
-              <a class="color-white" role="button" tabindex="0" (click)="esqueci()" (keydown.enter)="esqueci()">Esqueceu sua senha?</a>
-            </div>
-            @if (erro()) { <span class="erro-form">{{ erro() }}</span> }
-            @if (info()) { <span class="sucesso-form">{{ info() }}</span> }
-
-            <button class="form color-white" type="submit" [disabled]="enviando()">{{ enviando() ? 'Entrando...' : 'Fazer Login' }}</button>
-          </form>
-
-          <div class="registro-login-link color-white text-center">
-            <p>Não possui uma conta? <a class="color-white" routerLink="/registre-se" [queryParams]="{ returnUrl: rota.snapshot.queryParamMap.get('returnUrl') }">Registre-se</a></p>
-          </div>
-        </div>
-      </section>
-
-      <section class="logo-login-registro logo-background logo-style d-flex justify-content-center align-items-center">
-        <a routerLink="/" aria-label="Voltar para a página inicial"><img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu" /></a>
-      </section>
-    </main>
-  `,
+  imports: [ReactiveFormsModule, RouterLink, AlternarSenha],
+  templateUrl: './login.html',
 })
 export class Login {
   private fb = inject(FormBuilder);
   private auth = inject(Auth);
   private api = inject(Api);
-  private router = inject(Router);
-  rota = inject(ActivatedRoute);
-  form = this.fb.nonNullable.group({ email: ['', [Validators.required, Validators.email]], senha: ['', Validators.required] });
+  private rota = inject(ActivatedRoute);
+  private redirecionamento = inject(Redirecionamento);
+
+  readonly retorno = this.redirecionamento.retorno(this.rota);
+  readonly form = this.fb.nonNullable.group({
+    email: ['', [Validators.required, Validators.email]],
+    senha: ['', Validators.required],
+  });
+
   enviando = signal(false);
   verSenha = signal(false);
   erro = signal('');
   info = signal('');
-  inv(c: 'email' | 'senha') { const x = this.form.controls[c]; return x.invalid && (x.touched || x.dirty); }
+
+  invalido = (campo: 'email' | 'senha') => campoInvalido(this.form.controls[campo]);
 
   enviar() {
-    this.erro.set(''); this.info.set('');
+    this.limparMensagens();
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.enviando.set(true);
     const { email, senha } = this.form.getRawValue();
     this.auth.login(email, senha).subscribe({
-      next: () => this.router.navigateByUrl(destinoSeguro(this.rota.snapshot.queryParamMap.get('returnUrl'))),
-      error: (e) => { this.enviando.set(false); this.erro.set(mensagemErro(e)); },
+      next: () => this.redirecionamento.concluirAutenticacao(this.rota),
+      error: (erro) => {
+        this.enviando.set(false);
+        this.erro.set(mensagemErro(erro));
+      },
     });
   }
 
-  esqueci() {
-    this.erro.set(''); this.info.set('');
-    const c = this.form.controls.email;
-    if (c.invalid) { c.markAsTouched(); this.erro.set('Informe seu e-mail para recuperar a senha.'); return; }
-    this.api.esqueciSenha(c.value).subscribe({ next: (r) => this.info.set(r.mensagem), error: (e) => this.erro.set(mensagemErro(e)) });
+  recuperarSenha() {
+    this.limparMensagens();
+    const email = this.form.controls.email;
+    if (email.invalid) {
+      email.markAsTouched();
+      this.erro.set('Informe seu e-mail para recuperar a senha.');
+      return;
+    }
+    this.api.esqueciSenha(email.value).subscribe({
+      next: (resposta) => this.info.set(resposta.mensagem),
+      error: (erro) => this.erro.set(mensagemErro(erro)),
+    });
+  }
+
+  private limparMensagens() {
+    this.erro.set('');
+    this.info.set('');
   }
 }

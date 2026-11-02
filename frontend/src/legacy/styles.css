@@ -148,10 +148,6 @@ footer h3 {
     margin-left: 20px;   
 }
 
-.subtitulo>h2 {
-    font-size: 19px;
-}
-
 .azul {
     color: #004d8b;
 }
@@ -323,72 +319,3 @@ form button:hover {
     width: 100%;
     font-size: 13px;
 }
-
-.registro-link a {
-    text-decoration: underline;
-}
-
-.lazer-area {
-    max-width: 1030px;
-}
-
-.flex-card {
-    width: 90%;
-    max-width: 310px;
-    height: 204px;
-    background-color: #006CA6;
-    border-radius: 8px;
-    font-size: 12px;
-    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.4);
-}
-
-.flex-card h3 {
-    font-size: 14px;
-}
-
-.flex-card a {
-    color: #6c757d;
-    cursor: pointer;
-    width: 110px;
-    height: 25px;
-    margin-top: -4px;
-    border-radius: 7px;
-    position: absolute;
-    background-color: #298fd2;
-}
-
-.flex-card>span>p {
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    width: 90%;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.card-exibido {
-    background-color: rgba(0, 0, 0, 0.87);
-    height: 100vh;
-    width: 100%;
-    top: 0;
-    left: 0;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 999;
-    justify-content: center;    
-}
-
-.card-exibido p {
-    width: 80%;
-    max-width: 600px;
-    margin-top: 30px;
-    -webkit-line-clamp: 999;
-}
-
-.card-exibido a {
-    position: relative;
-    margin-top: 30px;
-}
-

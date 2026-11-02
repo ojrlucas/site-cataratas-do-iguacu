@@ -1,0 +1,79 @@
+form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.main-login-registro {
+  background-image: linear-gradient(180deg, rgba(0, 108, 165, 0.96), rgba(1, 58, 104, 0.98)), url('/imagens/login-registro-img.png');
+  background-blend-mode: normal;
+}
+
+.formulario {
+  animation: subir 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.formulario h1 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+form input {
+  border-radius: 12px;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+  color: #1d2a35;
+  color-scheme: light;
+}
+
+form input:focus {
+  border-color: #7fe08a;
+  box-shadow: 0 0 0 4px rgba(127, 224, 138, 0.28);
+}
+
+form button {
+  border-radius: 12px;
+  height: 44px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  background: linear-gradient(135deg, #58c162, #2f9a46);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, filter 0.2s;
+}
+
+form button:hover {
+  background: linear-gradient(135deg, #58c162, #258039);
+  transform: translateY(-2px);
+}
+
+form button.ver-senha {
+  background: none;
+  box-shadow: none;
+  width: auto;
+  height: auto;
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #d8ecf8;
+}
+
+form button.ver-senha:hover {
+  background: none;
+  transform: none;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.logo-login-registro img {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+form input::placeholder {
+  color: #70808d;
+}

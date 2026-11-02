@@ -1,0 +1,32 @@
+<main class="container-login-registro position-fixed d-flex bg-titulo">
+  <section class="main-login-registro position-fixed d-flex flex-column align-items-center justify-content-center">
+    <div class="formulario d-flex justify-content-center align-items-center flex-column color-white">
+      <h1>Acessar Conta</h1>
+      <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+        <label class="d-block" for="email">E-mail:</label>
+        <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" autocomplete="email" />
+        @if (invalido('email')) { <span class="erro-form">Informe um e-mail válido.</span> }
+        <label class="d-block" for="senha">Senha:</label>
+        <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" placeholder="  Sua senha" autocomplete="current-password" />
+        @if (invalido('senha')) { <span class="erro-form">Informe a senha.</span> }
+        <app-alternar-senha [(visivel)]="verSenha" />
+
+        <div class="esqueceu-senha">
+          <a class="color-white" role="button" tabindex="0" (click)="recuperarSenha()" (keydown.enter)="recuperarSenha()">Esqueceu sua senha?</a>
+        </div>
+        @if (erro()) { <span class="erro-form">{{ erro() }}</span> }
+        @if (info()) { <span class="sucesso-form">{{ info() }}</span> }
+
+        <button class="form color-white" type="submit" [disabled]="enviando()">{{ enviando() ? 'Entrando...' : 'Fazer Login' }}</button>
+      </form>
+
+      <div class="registro-login-link color-white text-center">
+        <p>Não possui uma conta? <a class="color-white" routerLink="/registre-se" [queryParams]="{ returnUrl: retorno }">Registre-se</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="logo-login-registro logo-background logo-style d-flex justify-content-center align-items-center">
+    <a routerLink="/" aria-label="Voltar para a página inicial"><img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu" /></a>
+  </section>
+</main>

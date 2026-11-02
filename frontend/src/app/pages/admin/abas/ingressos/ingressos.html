@@ -1,0 +1,37 @@
+@if (erro()) { <p class="msg-erro">{{ erro() }}</p> }
+<div class="barra-acoes">
+  <h3>Tipos de ingresso</h3>
+  <button type="button" class="btn-cpi verde" (click)="editar('novo')"><i class="bi bi-plus-lg"></i> Novo tipo</button>
+</div>
+<div class="tabela-wrap">
+  <table class="tabela">
+    <thead><tr><th>Nome</th><th>Preço</th><th>Situação</th><th></th></tr></thead>
+    <tbody>
+      @for (tipo of tipos(); track tipo.id) {
+        <tr>
+          <td><strong>{{ tipo.nome }}</strong></td>
+          <td>{{ tipo.precoCentavos / 100 | currency: 'BRL' }}</td>
+          <td><span class="chip" [class.ok]="tipo.ativo">{{ tipo.ativo ? 'Ativo' : 'Inativo' }}</span></td>
+          <td><button type="button" class="btn-cpi claro pequeno" (click)="editar(tipo)"><i class="bi bi-pencil-fill"></i> Editar</button></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (editando(); as alvo) {
+  <app-modal rotulo="Editar tipo de ingresso" (fechar)="fechar()">
+    <h2 class="modal-titulo">{{ alvo === 'novo' ? 'Novo tipo de ingresso' : 'Editar ' + alvo.nome }}</h2>
+    <form class="modal-corpo" [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="campo"><label for="t-nome">Nome</label><input id="t-nome" formControlName="nome" maxlength="60" /></div>
+      <div class="campo"><label for="t-preco">Preço (R$)</label><input id="t-preco" type="number" step="0.01" min="0" formControlName="preco" /></div>
+      <div class="campo"><label for="t-desc">Descrição</label><textarea id="t-desc" formControlName="descricao" maxlength="600"></textarea></div>
+      <div class="campo"><label for="t-img">Imagem</label>
+        <select id="t-img" formControlName="imagem">@for (imagem of imagens; track imagem) { <option [value]="imagem">{{ imagem }}</option> }</select>
+      </div>
+      <label class="campo-check"><input type="checkbox" formControlName="ativo" /> Disponível para venda</label>
+      @if (erroForm()) { <p class="msg-erro">{{ erroForm() }}</p> }
+      <button class="btn-cpi verde bloco" type="submit" [disabled]="form.invalid || salvando()">{{ salvando() ? 'Salvando...' : 'Salvar' }}</button>
+    </form>
+  </app-modal>
+}

@@ -1,24 +1,27 @@
-import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { openDb } from './db.js';
 import { createApp } from './app.js';
-import { createMailer } from './mailer.js';
+import { loadEnvironment } from './config/environment.js';
+import { openDb } from './database/connection.js';
+import { createMailer } from './email/mailer.js';
 
-const here = path.dirname(fileURLToPath(import.meta.url));
-const port = Number(process.env.PORT) || 3000;
-const dataDir = process.env.DATA_DIR || path.join(here, '..', 'data');
-let jwtSecret = process.env.JWT_SECRET;
-if (process.env.NODE_ENV === 'production' && (!jwtSecret || jwtSecret.length < 32)) {
-  console.error('JWT_SECRET é obrigatório em produção e deve ter ao menos 32 caracteres.');
-  process.exit(1);
+const baseDir = path.dirname(fileURLToPath(import.meta.url));
+
+function loadEnvironmentOrExit() {
+  try {
+    return loadEnvironment(process.env, baseDir);
+  } catch (error) {
+    console.error(error.message);
+    return process.exit(1);
+  }
 }
-if (!jwtSecret) jwtSecret = crypto.randomBytes(32).toString('hex');
 
+const environment = loadEnvironmentOrExit();
 const app = createApp({
-  db: openDb(path.join(dataDir, 'cataratas.db')),
-  jwtSecret,
+  db: openDb(path.join(environment.dataDir, 'cataratas.db')),
+  jwtSecret: environment.jwtSecret,
   mailer: createMailer(),
-  staticDir: process.env.STATIC_DIR,
+  staticDir: environment.staticDir,
 });
-app.listen(port, () => console.log(`API Cataratas do Iguaçu em http://0.0.0.0:${port}`));
+
+app.listen(environment.port, () => console.log(`API Cataratas do Iguaçu em http://0.0.0.0:${environment.port}`));

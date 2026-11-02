@@ -56,7 +56,19 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
               "src/legacy/styles.css",
               "src/legacy/styles-media.css",
-              "src/styles.css"
+              "src/styles/tokens.css",
+              "src/styles/base.css",
+              "src/styles/layout.css",
+              "src/styles/botoes.css",
+              "src/styles/cartoes.css",
+              "src/styles/modal.css",
+              "src/styles/formularios.css",
+              "src/styles/admin.css",
+              "src/styles/autenticacao.css",
+              "src/styles/feedback.css",
+              "src/styles/tema-botao.css",
+              "src/styles/animacoes.css",
+              "src/styles/tema-escuro.css"
             ]
           },
           "configurations": {

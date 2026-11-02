@@ -1,0 +1,161 @@
+[data-tema="escuro"] {
+  --fundo: #08131d;
+  --texto: #e4edf4;
+  --suave: #9db1c2;
+  --superficie: #112435;
+  --superficie-2: #0c1b2a;
+  --borda: #2b4660;
+  --linha: #1d3850;
+  --chip: #1b3a55;
+  --titulo: #cfe8fa;
+  --link: #7cc4f0;
+  --furo: #08131d;
+  --halo: #0f2a40;
+  --esq1: #112435;
+  --esq2: #1a3550;
+  --hover-linha: #163149;
+  --vidro-aba: rgba(17, 36, 53, 0.75);
+  --sombra: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
+  --sombra-forte: 0 2px 4px rgba(0, 0, 0, 0.5), 0 22px 48px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+[data-tema="escuro"] .cartao,
+[data-tema="escuro"] .ingresso,
+[data-tema="escuro"] .painel,
+[data-tema="escuro"] .metrica,
+[data-tema="escuro"] .pedido,
+[data-tema="escuro"] .tabela-wrap,
+[data-tema="escuro"] .vazio {
+  border-color: rgba(124, 196, 240, 0.12);
+}
+
+[data-tema="escuro"] .secao-titulo b {
+  background: linear-gradient(135deg, #7cc4f0, #8be394);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-tema="escuro"] .eyebrow {
+  color: #8be394;
+}
+
+[data-tema="escuro"] .cartao-texto,
+[data-tema="escuro"] .ingresso-corpo p {
+  color: var(--suave);
+}
+
+[data-tema="escuro"] .ingresso-preco small {
+  color: var(--suave);
+}
+
+[data-tema="escuro"] .btn-cpi.claro {
+  color: var(--titulo);
+}
+
+[data-tema="escuro"] .btn-cpi.claro:hover {
+  background: #24496a;
+  color: #fff;
+}
+
+[data-tema="escuro"] .chip.ok {
+  background: #14361d;
+  color: #8be394;
+}
+
+[data-tema="escuro"] .chip.alerta {
+  background: #3a2f0f;
+  color: #f2cd6b;
+}
+
+[data-tema="escuro"] .msg-erro {
+  background: #3a1818;
+  color: #ffb3b3;
+}
+
+[data-tema="escuro"] .msg-ok {
+  background: #14361d;
+  color: #9be8a4;
+}
+
+[data-tema="escuro"] .aviso-fa {
+  background: #2a2410;
+  border-color: #5c4a12;
+  color: #f2d98a;
+}
+
+[data-tema="escuro"] .erro-pagina {
+  color: #ff9a9a;
+}
+
+[data-tema="escuro"] .modal-fechar {
+  background: rgba(17, 36, 53, 0.92);
+  color: var(--titulo);
+}
+
+[data-tema="escuro"] .campo input,
+[data-tema="escuro"] .campo select,
+[data-tema="escuro"] .campo textarea {
+  color: var(--texto);
+}
+
+[data-tema="escuro"] .campo .erro-campo {
+  color: #ff9a9a;
+}
+
+[data-tema="escuro"] .tabela td {
+  color: var(--texto);
+}
+
+[data-tema="escuro"] .aba {
+  color: var(--titulo);
+}
+
+[data-tema="escuro"] .aba.ativa {
+  color: #fff;
+}
+
+[data-tema="escuro"] .seletor output,
+[data-tema="escuro"] .resumo strong {
+  color: var(--titulo);
+}
+
+[data-tema="escuro"] .qr-bloco img {
+  background: #fff;
+}
+
+[data-tema="escuro"] .metrica > i {
+  color: #7cc4f0;
+  opacity: 0.22;
+}
+
+[data-tema="escuro"] ::selection {
+  background: #1d4f73;
+  color: #fff;
+}
+
+[data-tema="escuro"] .bg-titulo:not(.container-login-registro)::after {
+  background: var(--fundo);
+}
+
+[data-tema="escuro"] .bg-titulo:not(.container-login-registro)::before {
+  background: linear-gradient(180deg, rgba(1, 20, 38, 0.62) 0%, rgba(1, 30, 56, 0.3) 42%, rgba(1, 14, 26, 0.85) 100%);
+}
+
+[data-tema="escuro"] .logo-login-registro img {
+  opacity: 0.9;
+}
+
+[data-tema="escuro"] .esqueleto {
+  opacity: 0.9;
+}
+
+[data-tema="escuro"] .tema-btn .sol {
+  transform: translateY(-26px) rotate(90deg);
+  opacity: 0;
+}
+
+[data-tema="escuro"] .tema-btn .lua {
+  transform: translateY(0) rotate(0);
+  opacity: 1;
+}

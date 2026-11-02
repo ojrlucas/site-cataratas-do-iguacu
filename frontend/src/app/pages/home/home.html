@@ -1,23 +1,16 @@
-<section class="bg-titulo home d-flex justify-content-center align-items-center flex-column color-white">
-  <div class="titulo">
-    <h1 class="text-center text-uppercase">
-      <span class="titulo-esquerda fw-normal d-block text-uppercase">parque</span>
-      nacional do Iguaçu
-      <span class="titulo-direita fw-normal d-block text-uppercase">patrimônio mundial natural</span>
-    </h1>
-  </div>
-
+<app-hero-parque inicio>
   <div class="comprar-ingresso">
     <a class="text-uppercase d-flex text-decoration-none color-white fw-bold" routerLink="/ingressos">COMPRAR INGRESSO</a>
   </div>
 
   <div class="informacoes-home d-flex text-center align-items-center">
-    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('funcionamento')"><i class="azul bi bi-clock-fill me-2"></i> Funcionamento</a>
-    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('como-chegar')"><i class="azul bi bi-geo-alt-fill me-2"></i> Como chegar</a>
-    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('estacionamento')"><i class="azul bi bi-car-front-fill me-2"></i> Estacionamento</a>
-    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('mapa')"><i class="azul bi bi-map-fill me-2"></i> Mapa</a>
+    @for (atalho of atalhos; track atalho.id) {
+      <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir(atalho.id)">
+        <i class="azul bi {{ atalho.icone }} me-2"></i> {{ atalho.rotulo }}
+      </a>
+    }
   </div>
-</section>
+</app-hero-parque>
 
 <div id="div-funcionamento" class="divs-informacoes-home" [class.aberto]="painel() === 'funcionamento'" (click)="fechar()">
   <div class="text-info-home">

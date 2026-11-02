@@ -35,9 +35,9 @@ Sem `--senha`, a senha é solicitada de forma oculta.
 ```bash
 cd backend && npm install && npm run dev
 cd frontend && npm install && npm start
-cd backend && npm test
+cd backend && npm run lint && npm test
 
-cd frontend && npm run build
+cd frontend && npm run lint && npm run build
 cd e2e && npm install && npx playwright install chromium && npx playwright test
 ```
 

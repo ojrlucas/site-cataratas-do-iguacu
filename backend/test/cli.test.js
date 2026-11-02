@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { openDb } from '../src/db.js';
-import { run } from '../src/cli.js';
+import { openDb } from '../src/database/connection.js';
+import { run } from '../src/cli/index.js';
 
 test('CLI superadmin: criar, atualizar, promover, rebaixar, listar', async () => {
   const db = openDb(':memory:');

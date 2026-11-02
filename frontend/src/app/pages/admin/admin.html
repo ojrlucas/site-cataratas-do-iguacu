@@ -6,139 +6,16 @@
 
 <section class="pagina">
   <div class="abas" role="group" aria-label="Seções do painel">
-    @for (a of abas; track a.id) {
-      <button type="button" class="aba" [class.ativa]="aba() === a.id" (click)="abrir(a.id)"><i class="bi {{ a.icone }}"></i> {{ a.nome }}</button>
+    @for (item of abas; track item.id) {
+      <button type="button" class="aba" [class.ativa]="aba() === item.id" (click)="selecionar(item.id)"><i class="bi {{ item.icone }}"></i> {{ item.nome }}</button>
     }
   </div>
 
-  @if (erro()) { <p class="msg-erro">{{ erro() }}</p> }
-
   @switch (aba()) {
-    @case ('resumo') {
-      @if (resumo(); as r) {
-        <div class="metricas">
-          <div class="metrica"><i class="bi bi-people-fill"></i><span>Usuários</span><strong [appContar]="r.usuarios">{{ r.usuarios }}</strong></div>
-          <div class="metrica"><i class="bi bi-receipt"></i><span>Pedidos</span><strong [appContar]="r.pedidos">{{ r.pedidos }}</strong></div>
-          <div class="metrica"><i class="bi bi-ticket-perforated-fill"></i><span>Ingressos vendidos</span><strong [appContar]="r.ingressos">{{ r.ingressos }}</strong></div>
-          <div class="metrica"><i class="bi bi-calendar-check-fill"></i><span>Pedidos hoje</span><strong [appContar]="r.hoje">{{ r.hoje }}</strong></div>
-          <div class="metrica"><i class="bi bi-cash-coin"></i><span>Receita (fictícia)</span><strong [appContar]="r.receitaCentavos / 100" formato="moeda">{{ r.receitaCentavos / 100 | currency: 'BRL' }}</strong></div>
-        </div>
-      }
-    }
-    @case ('pedidos') {
-      <div class="tabela-wrap">
-        <table class="tabela">
-          <thead><tr><th>Código</th><th>Cliente</th><th>Ingresso</th><th>Visita</th><th>Total</th><th>E-mail</th></tr></thead>
-          <tbody>
-            @for (p of pedidos(); track p.id) {
-              <tr>
-                <td><strong>{{ p.codigo }}</strong></td>
-                <td>{{ p.usuarioNome }}<br /><small>{{ p.usuarioEmail }}</small></td>
-                <td>{{ p.quantidade }}x {{ p.tipoNome }}</td>
-                <td>{{ p.dataVisita + 'T12:00:00' | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ p.totalCentavos / 100 | currency: 'BRL' }}</td>
-                <td><span class="chip" [class.ok]="p.emailEnviado" [class.alerta]="!p.emailEnviado">{{ p.emailEnviado ? 'Enviado' : 'Pendente' }}</span></td>
-              </tr>
-            } @empty { <tr><td colspan="6" class="text-center">Nenhum pedido.</td></tr> }
-          </tbody>
-        </table>
-      </div>
-    }
-    @case ('usuarios') {
-      <div class="tabela-wrap">
-        <table class="tabela">
-          <thead><tr><th>Nome</th><th>E-mail</th><th>Pedidos</th><th>Cadastro</th><th>Papel</th></tr></thead>
-          <tbody>
-            @for (u of usuarios(); track u.id) {
-              <tr>
-                <td>{{ u.nome }}</td>
-                <td>{{ u.email }}</td>
-                <td>{{ u.pedidos }}</td>
-                <td>{{ u.criadoEm | date: 'dd/MM/yyyy' }}</td>
-                <td>
-                  <select [value]="u.papel" [disabled]="u.id === auth.usuario()?.id" (change)="alterarPapel(u, $any($event.target).value)" [attr.aria-label]="'Papel de ' + u.nome">
-                    <option value="usuario">Usuário</option>
-                    <option value="superadmin">Superadmin</option>
-                  </select>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-    @case ('ingressos') {
-      <div class="barra-acoes">
-        <h3>Tipos de ingresso</h3>
-        <button type="button" class="btn-cpi verde" (click)="editarTipo('novo')"><i class="bi bi-plus-lg"></i> Novo tipo</button>
-      </div>
-      <div class="tabela-wrap">
-        <table class="tabela">
-          <thead><tr><th>Nome</th><th>Preço</th><th>Situação</th><th></th></tr></thead>
-          <tbody>
-            @for (t of tipos(); track t.id) {
-              <tr>
-                <td><strong>{{ t.nome }}</strong></td>
-                <td>{{ t.precoCentavos / 100 | currency: 'BRL' }}</td>
-                <td><span class="chip" [class.ok]="t.ativo">{{ t.ativo ? 'Ativo' : 'Inativo' }}</span></td>
-                <td><button type="button" class="btn-cpi claro pequeno" (click)="editarTipo(t)"><i class="bi bi-pencil-fill"></i> Editar</button></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-    @case ('atividades') {
-      <div class="barra-acoes">
-        <h3>Atividades de lazer</h3>
-        <button type="button" class="btn-cpi verde" (click)="editarAtividade('novo')"><i class="bi bi-plus-lg"></i> Nova atividade</button>
-      </div>
-      <div class="grade">
-        @for (a of atividades(); track a.id) {
-          <article class="cartao">
-            <div class="cartao-img"><img [src]="a.imagem" [alt]="a.alt" loading="lazy" /><h3>{{ a.titulo }}</h3></div>
-            <div class="cartao-corpo">
-              <p class="cartao-texto">{{ a.descricao }}</p>
-              <div class="cartao-rodape">
-                <button type="button" class="btn-cpi claro pequeno" (click)="editarAtividade(a)"><i class="bi bi-pencil-fill"></i> Editar</button>
-                <button type="button" class="btn-cpi perigo pequeno" (click)="excluirAtividade(a)"><i class="bi bi-trash-fill"></i> Excluir</button>
-              </div>
-            </div>
-          </article>
-        }
-      </div>
-    }
+    @case ('resumo') { <app-admin-resumo /> }
+    @case ('pedidos') { <app-admin-pedidos /> }
+    @case ('usuarios') { <app-admin-usuarios /> }
+    @case ('ingressos') { <app-admin-ingressos /> }
+    @case ('atividades') { <app-admin-atividades /> }
   }
 </section>
-
-@if (editandoTipo(); as alvo) {
-  <app-modal rotulo="Editar tipo de ingresso" (fechar)="editandoTipo.set(null)">
-    <h2 class="modal-titulo">{{ alvo === 'novo' ? 'Novo tipo de ingresso' : 'Editar ' + alvo.nome }}</h2>
-    <form class="modal-corpo" [formGroup]="formTipo" (ngSubmit)="salvarTipo()">
-      <div class="campo"><label for="t-nome">Nome</label><input id="t-nome" formControlName="nome" maxlength="60" /></div>
-      <div class="campo"><label for="t-preco">Preço (R$)</label><input id="t-preco" type="number" step="0.01" min="0" formControlName="preco" /></div>
-      <div class="campo"><label for="t-desc">Descrição</label><textarea id="t-desc" formControlName="descricao" maxlength="600"></textarea></div>
-      <div class="campo"><label for="t-img">Imagem</label>
-        <select id="t-img" formControlName="imagem">@for (i of imagens; track i) { <option [value]="i">{{ i }}</option> }</select>
-      </div>
-      <label class="campo-check"><input type="checkbox" formControlName="ativo" /> Disponível para venda</label>
-      @if (erroForm()) { <p class="msg-erro">{{ erroForm() }}</p> }
-      <button class="btn-cpi verde bloco" type="submit" [disabled]="formTipo.invalid || salvando()">{{ salvando() ? 'Salvando...' : 'Salvar' }}</button>
-    </form>
-  </app-modal>
-}
-
-@if (editandoAtividade(); as alvo) {
-  <app-modal rotulo="Editar atividade" (fechar)="editandoAtividade.set(null)">
-    <h2 class="modal-titulo">{{ alvo === 'novo' ? 'Nova atividade' : 'Editar ' + alvo.titulo }}</h2>
-    <form class="modal-corpo" [formGroup]="formAtividade" (ngSubmit)="salvarAtividade()">
-      <div class="campo"><label for="a-titulo">Título</label><input id="a-titulo" formControlName="titulo" maxlength="60" /></div>
-      <div class="campo"><label for="a-desc">Descrição</label><textarea id="a-desc" formControlName="descricao" maxlength="1500"></textarea></div>
-      <div class="campo"><label for="a-img">Imagem</label>
-        <select id="a-img" formControlName="imagem">@for (i of imagens; track i) { <option [value]="i">{{ i }}</option> }</select>
-      </div>
-      @if (erroForm()) { <p class="msg-erro">{{ erroForm() }}</p> }
-      <button class="btn-cpi verde bloco" type="submit" [disabled]="formAtividade.invalid || salvando()">{{ salvando() ? 'Salvando...' : 'Salvar' }}</button>
-    </form>
-  </app-modal>
-}

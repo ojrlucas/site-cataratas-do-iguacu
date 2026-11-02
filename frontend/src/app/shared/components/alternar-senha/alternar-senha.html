@@ -1,0 +1,4 @@
+<button type="button" class="ver-senha" (click)="visivel.set(!visivel())">
+  <i class="bi" [class.bi-eye]="!visivel()" [class.bi-eye-slash]="visivel()"></i>
+  {{ visivel() ? 'Ocultar senha' : 'Mostrar senha' }}
+</button>

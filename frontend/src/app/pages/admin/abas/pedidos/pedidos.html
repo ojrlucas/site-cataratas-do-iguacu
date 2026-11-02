@@ -1,0 +1,18 @@
+@if (erro()) { <p class="msg-erro">{{ erro() }}</p> }
+<div class="tabela-wrap">
+  <table class="tabela">
+    <thead><tr><th>Código</th><th>Cliente</th><th>Ingresso</th><th>Visita</th><th>Total</th><th>E-mail</th></tr></thead>
+    <tbody>
+      @for (pedido of pedidos(); track pedido.id) {
+        <tr>
+          <td><strong>{{ pedido.codigo }}</strong></td>
+          <td>{{ pedido.usuarioNome }}<br /><small>{{ pedido.usuarioEmail }}</small></td>
+          <td>{{ pedido.quantidade }}x {{ pedido.tipoNome }}</td>
+          <td>{{ pedido.dataVisita + 'T12:00:00' | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ pedido.totalCentavos / 100 | currency: 'BRL' }}</td>
+          <td><span class="chip" [class.ok]="pedido.emailEnviado" [class.alerta]="!pedido.emailEnviado">{{ pedido.emailEnviado ? 'Enviado' : 'Pendente' }}</span></td>
+        </tr>
+      } @empty { <tr><td colspan="6" class="text-center">Nenhum pedido.</td></tr> }
+    </tbody>
+  </table>
+</div>

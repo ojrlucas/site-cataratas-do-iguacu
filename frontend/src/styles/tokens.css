@@ -1,0 +1,31 @@
+:root {
+  --azul: #006ca6;
+  --azul-escuro: #004d8b;
+  --azul-profundo: #013a68;
+  --verde: #4caf50;
+  --verde-escuro: #036800;
+  --fundo: #e9eff3;
+  --texto: #1d2a35;
+  --suave: #5b6b78;
+  --fonte: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fonte-titulo: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --vidro: rgba(255, 255, 255, 0.14);
+  --vidro-borda: rgba(255, 255, 255, 0.34);
+  --raio: 22px;
+  --sombra: 0 1px 2px rgba(1, 58, 104, 0.06), 0 10px 30px rgba(1, 58, 104, 0.1);
+  --sombra-forte: 0 2px 4px rgba(1, 58, 104, 0.08), 0 22px 48px rgba(1, 58, 104, 0.2);
+  --superficie: #ffffff;
+  --superficie-2: #f1f6fa;
+  --borda: #c4d3de;
+  --linha: #e3ebf1;
+  --chip: #e3edf4;
+  --titulo: #013a68;
+  --link: #004d8b;
+  --furo: #e7eef3;
+  --halo: #dcecf6;
+  --esq1: #dfe8ee;
+  --esq2: #f3f7fa;
+  --hover-linha: #eaf3f9;
+  --vidro-aba: rgba(255, 255, 255, 0.7);
+  color-scheme: light;
+}

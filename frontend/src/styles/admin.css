@@ -1,0 +1,150 @@
+.abas {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 24px;
+  background: var(--vidro-aba);
+  backdrop-filter: blur(10px);
+  border-radius: 999px;
+  padding: 6px;
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--sombra);
+}
+
+.aba {
+  border: 0;
+  padding: 10px 20px;
+  border-radius: 999px;
+  color: var(--titulo);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  background: transparent;
+  box-shadow: none;
+  transition: background 0.25s, color 0.25s;
+}
+
+.aba.ativa {
+  color: #fff;
+  background: linear-gradient(135deg, #0a7ab8, #005f99);
+  box-shadow: 0 6px 14px rgba(0, 95, 153, 0.35);
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 18px;
+}
+
+.metrica {
+  background: var(--superficie);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 20px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  border-top: 0;
+}
+
+.metrica span {
+  color: var(--suave);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.metrica strong {
+  color: var(--titulo);
+  overflow-wrap: anywhere;
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: clamp(24px, 2.4vw, 32px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabela-wrap {
+  overflow-x: auto;
+  border-radius: var(--raio);
+  background: var(--superficie);
+  box-shadow: var(--sombra);
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 560px;
+}
+
+.tabela th {
+  text-align: left;
+  color: #fff;
+  padding: 12px 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #0a7ab8, #005f99);
+}
+
+.tabela td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--linha);
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.tabela tr:last-child td {
+  border-bottom: 0;
+}
+
+.barra-acoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.barra-acoes h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--titulo);
+}
+
+.aba:hover:not(.ativa) {
+  background: var(--chip);
+}
+
+.metrica::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--azul), var(--verde));
+}
+
+.metrica > i {
+  position: absolute;
+  right: 16px;
+  top: 18px;
+  font-size: 30px;
+  color: var(--azul);
+  opacity: 0.18;
+}
+
+.tabela tbody tr {
+  transition: background 0.2s;
+}
+
+.tabela tbody tr:hover td {
+  background: var(--hover-linha);
+}

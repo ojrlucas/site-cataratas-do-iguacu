@@ -1,0 +1,20 @@
+<app-modal [rotulo]="'Comprar ' + tipo().nome" (fechar)="fechar.emit()">
+  <h2 class="modal-titulo">Comprar ingresso {{ tipo().nome }}</h2>
+  <form class="modal-corpo" [formGroup]="form" (ngSubmit)="confirmar()" style="width: 100%">
+    <div class="campo">
+      <span id="rotulo-quantidade" class="rotulo-campo">Quantidade (máx. {{ maxQuantidade }})</span>
+      <div class="seletor" role="group" aria-labelledby="rotulo-quantidade">
+        <button type="button" (click)="alterarQuantidade(-1)" [disabled]="quantidade() <= minQuantidade" aria-label="Diminuir quantidade">−</button>
+        <output aria-live="polite">{{ quantidade() }}</output>
+        <button type="button" (click)="alterarQuantidade(1)" [disabled]="quantidade() >= maxQuantidade" aria-label="Aumentar quantidade">+</button>
+      </div>
+    </div>
+    <div class="campo">
+      <label for="dataVisita">Data da visita</label>
+      <input id="dataVisita" type="date" [min]="hoje" formControlName="dataVisita" />
+    </div>
+    <div class="resumo"><span>Total</span><strong>{{ total() | currency: 'BRL' }}</strong></div>
+    @if (erro()) { <p class="msg-erro">{{ erro() }}</p> }
+    <button class="btn-cpi verde bloco" type="submit" [disabled]="form.invalid || enviando()">{{ enviando() ? 'Processando...' : 'Confirmar compra' }}</button>
+  </form>
+</app-modal>
