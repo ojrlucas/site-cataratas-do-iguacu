@@ -36,12 +36,17 @@ Sem `--senha`, a senha é solicitada de forma oculta.
 cd backend && npm install && npm run dev
 cd frontend && npm install && npm start
 cd backend && npm test
+
+cd frontend && npm run build
+cd e2e && npm install && npx playwright install chromium && npx playwright test
 ```
 
 ## Estrutura
 
 ```
 backend/    API Express, SQLite, e-mail, CLI e testes
+e2e/        Testes ponta a ponta (Playwright)
+.github/    Fluxo de CI (testes, build, e2e, Docker)
 frontend/   Angular (Home, Sobre, Lazer, Ingressos, Login, Registro, Admin)
 docs/livro/ Fontes e PDF do livro do sistema
 docker-compose.yml

@@ -18,18 +18,18 @@ const senhasIguais = (g: AbstractControl): ValidationErrors | null =>
           <h1>Criar Conta</h1>
           <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
             <label for="nome">Nome Completo:</label>
-            <input type="text" id="nome" formControlName="nome" aria-label="Digite o seu nome completo" autocomplete="name" />
+            <input type="text" id="nome" formControlName="nome" autocomplete="name" />
             @if (inv('nome')) { <span class="erro-form">Informe o nome completo.</span> }
 
             <div class="email-numero-container">
               <div>
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" aria-label="Digite seu e-mail" autocomplete="email" />
+                <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" autocomplete="email" />
                 @if (inv('email')) { <span class="erro-form">Informe um e-mail válido.</span> }
               </div>
               <div class="numero">
                 <label for="numero">Número de Telefone:</label>
-                <input type="tel" id="numero" formControlName="telefone" placeholder="  (00) 90000-0000" aria-label="Digite seu número" autocomplete="tel" />
+                <input type="tel" id="numero" formControlName="telefone" placeholder="  (00) 90000-0000" autocomplete="tel" />
                 @if (inv('telefone')) { <span class="erro-form">Telefone com DDD (10 ou 11 dígitos).</span> }
               </div>
             </div>
@@ -37,12 +37,12 @@ const senhasIguais = (g: AbstractControl): ValidationErrors | null =>
             <div class="senha-confirmacao-container">
               <div>
                 <label for="senha">Crie uma Senha:</label>
-                <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" aria-label="Crie uma senha" autocomplete="new-password" />
+                <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" autocomplete="new-password" />
                 @if (inv('senha')) { <span class="erro-form">Entre 8 e 72 caracteres.</span> }
               </div>
               <div class="confirmacao-senha">
                 <label for="confirmacao-senha">Confirme sua Senha:</label>
-                <input [type]="verSenha() ? 'text' : 'password'" id="confirmacao-senha" formControlName="confirmacaoSenha" aria-label="Confirme sua senha" autocomplete="new-password" />
+                <input [type]="verSenha() ? 'text' : 'password'" id="confirmacao-senha" formControlName="confirmacaoSenha" autocomplete="new-password" />
                 @if (form.hasError('senhasDiferentes') && form.controls.confirmacaoSenha.touched) { <span class="erro-form">As senhas não conferem.</span> }
               </div>
             </div>
@@ -53,7 +53,7 @@ const senhasIguais = (g: AbstractControl): ValidationErrors | null =>
           </form>
 
           <div class="registro-login-link color-white text-center">
-            <p>Já possui uma conta? <a class="color-white" routerLink="/login" aria-label="Ir para a página de login">Fazer Login</a></p>
+            <p>Já possui uma conta? <a class="color-white" routerLink="/login">Fazer Login</a></p>
           </div>
         </div>
       </section>

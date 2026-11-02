@@ -15,24 +15,24 @@ import { TemaBotao } from '../core/tema';
       </section>
 
       <section class="nav-links d-flex align-items-center">
-        <i (click)="aberto.set(!aberto())" class="bi bi-list color-white" role="button" aria-label="Abrir menu"></i>
+        <i (click)="aberto.set(!aberto())" (keydown.enter)="aberto.set(!aberto())" tabindex="0" class="bi bi-list color-white" role="button" [attr.aria-expanded]="aberto()" aria-label="Abrir menu"></i>
         <ul id="nav-links-lista" class="list-unstyled w-100" [class.aberto]="aberto()" (click)="aberto.set(false)">
-          <li><a class="color-white text-decoration-none" routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" aria-label="Voltar a página inicial"><i class="bi bi-house-fill"></i> Home</a></li>
-          <li><a class="color-white text-decoration-none" routerLink="/sobre" routerLinkActive="ativo" aria-label="Acessar a página com informações sobre as Cataratas do Iguaçu"><i class="bi bi-info-circle-fill"></i> Sobre</a></li>
-          <li><a class="color-white text-decoration-none" routerLink="/lazer" routerLinkActive="ativo" aria-label="Acessar a página com informações sobre as atividades de lazer das Cataratas do Iguaçu"><i class="bi bi-tree-fill"></i> Lazer</a></li>
-          <li><a class="color-white text-decoration-none" routerLink="/ingressos" routerLinkActive="ativo" aria-label="Acessar a página de ingressos"><i class="bi bi-ticket-perforated-fill"></i> Ingressos</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }"><i class="bi bi-house-fill"></i> Home</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/sobre" routerLinkActive="ativo"><i class="bi bi-info-circle-fill"></i> Sobre</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/lazer" routerLinkActive="ativo"><i class="bi bi-tree-fill"></i> Lazer</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/ingressos" routerLinkActive="ativo"><i class="bi bi-ticket-perforated-fill"></i> Ingressos</a></li>
           @if (auth.admin()) {
-            <li><a class="color-white text-decoration-none" routerLink="/admin" routerLinkActive="ativo" aria-label="Abrir o painel administrativo"><i class="bi bi-shield-lock-fill"></i> Admin</a></li>
+            <li><a class="color-white text-decoration-none" routerLink="/admin" routerLinkActive="ativo"><i class="bi bi-shield-lock-fill"></i> Admin</a></li>
           }
           <li class="login-registro w-100 d-flex justify-content-center">
             <div class="d-flex align-items-center gap-2">
               <app-tema />
               @if (auth.usuario(); as u) {
                 <span class="nav-usuario me-2">Olá, {{ primeiroNome(u.nome) }}</span>
-                <a (click)="sair()" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none" aria-label="Sair da conta">Sair</a>
+                <a (click)="sair()" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none">Sair</a>
               } @else {
-                <a routerLink="/login" aria-label="ir para a página de login" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none">Login</a>
-                <a routerLink="/registre-se" aria-label="ir para a página de cadastro" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none">Registre-se</a>
+                <a routerLink="/login" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none">Login</a>
+                <a routerLink="/registre-se" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none">Registre-se</a>
               }
             </div>
           </li>

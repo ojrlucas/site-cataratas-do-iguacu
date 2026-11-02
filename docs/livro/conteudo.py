@@ -79,7 +79,7 @@ CAPS[2] = ('Visão do produto', 1, """
  ['OB2','Experiência responsiva','Rolagem horizontal nas telas verificadas','Zero em 390 px e 1280 px'],
  ['OB3','Carregamento leve','Tamanho publicado do front-end','5,1 MB (reduzido de 36 MB após otimizar imagens)'],
  ['OB4','Segurança básica sólida','Itens do OWASP Top 10 com controle aplicado','10 de 10 tratados (cap. 12)'],
- ['OB5','Qualidade verificável','Testes automatizados do back-end','5 de 5 aprovados'],
+ ['OB5','Qualidade verificável','Testes automatizados (API e CLI) e ponta a ponta (interface)','5 de 5 e 12 de 12 aprovados'],
  ['OB6','Operação simples','Comandos para subir o sistema','1 (docker compose up --build)']]) + """
 <h2 class="s">2.5 Premissas, restrições e dependências</h2>
 """ + tab(['Tipo','Descrição'], [
@@ -190,7 +190,7 @@ RNF = [
  ('RNF13','Segurança','Cabeçalhos de segurança e CSP restritiva.','CSP default-src self; frame-ancestors none; nosniff; Referrer-Policy no-referrer','Inspeção dos cabeçalhos'),
  ('RNF14','Segurança','Infraestrutura endurecida.','Usuário não root, back-end somente leitura, cap_drop ALL, no-new-privileges, nginx sem privilégios','Inspeção do compose e dos Dockerfiles'),
  ('RNF15','Segurança','Segredos obrigatórios em produção.','Sem JWT_SECRET de 32+ caracteres o servidor não inicia','Execução com e sem a variável'),
- ('RNF16','Manutenibilidade','Código modular, tipado e testado, sem comentários.','Back-end: ~600 linhas em 6 módulos; front-end Angular standalone; 5 testes automatizados','Revisão e execução de npm test'),
+ ('RNF16','Manutenibilidade','Código modular, tipado e testado, sem comentários.','Back-end: ~600 linhas em 6 módulos; front-end Angular standalone; 5 testes de API/CLI e 6 cenários E2E (12 execuções)','Revisão; npm test e playwright test'),
  ('RNF17','Portabilidade','Execução reproduzível por contêineres.','docker compose up --build sobe frontend, backend e mailpit','Configuração do compose (build não validado no sandbox)'),
  ('RNF18','Operabilidade','Diagnóstico simples.','GET /api/health; logs no stdout; erros 500 registrados sem vazar detalhes ao cliente','Chamada ao endpoint e inspeção do código'),
  ('RNF19','Privacidade','Minimização e finalidade (LGPD).','Coleta apenas nome, e-mail, telefone e senha (hash); senhas nunca retornam pela API; dados fictícios','Revisão das rotas e do esquema'),
@@ -317,6 +317,8 @@ CAPS[9] = ('Arquitetura', 3, """
 ├── backend/   Dockerfile
 │   ├── src/   app.js  server.js  db.js  data.js  mailer.js  cli.js
 │   └── test/  api.test.js  cli.test.js
+├── e2e/       playwright.config.js  tests/fluxos.spec.js
+├── .github/workflows/ci.yml
 ├── frontend/  Dockerfile  nginx.conf  proxy.conf.json
 │   ├── public/  imagens/  tema-init.js
 │   └── src/app/ core/ (api, auth, guards, modal, tema, toast, reveal, contar)
@@ -468,8 +470,9 @@ CAPS[15] = ('Estratégia e plano de testes', 4, """
 """ + tab(['Nível','Abordagem','Ferramenta','Situação'], [
  ['API (integração)','Servidor real em porta efêmera, banco em memória, e-mail simulado','node --test (nativo)','Automatizado, no repositório'],
  ['CLI','Execução da função run() contra banco em memória','node --test','Automatizado, no repositório'],
- ['Interface ponta a ponta','Cadastro, login com retorno, compra, QR, painel, tema, responsividade','Playwright (Chromium headless)','Executado durante o desenvolvimento; scripts não versionados'],
- ['Infraestrutura','Build das imagens e subida do compose','Docker','Não validado no ambiente de entrega (sem acesso ao registro npm)']]) + """
+ ['Interface ponta a ponta','Cadastro, login com retorno, compra, QR, painel, tema e responsividade, em desktop (1280 px) e celular (390 px)','Playwright (Chromium), pasta e2e','Automatizado, no repositório'],
+ ['Integração contínua','Testes da API, build do Angular, ponta a ponta, npm audit, docker compose config e build','GitHub Actions (.github/workflows/ci.yml)','Definido; executa a cada push, ainda não executado no GitHub'],
+ ['Infraestrutura','Build das imagens e subida do compose','Docker (no CI)','Não validado no ambiente de entrega (sem acesso ao registro npm); coberto pelo CI']]) + """
 <h2 class="s">15.2 Casos de teste automatizados</h2>
 """ + tab(['ID','Caso','Resultado esperado','RF / RN'], [
  ['TC01','Conteúdo público','Health ok; 6 atividades; 2 tipos ativos; contatos do parque','RF01-RF04'],
@@ -483,34 +486,46 @@ CAPS[15] = ('Estratégia e plano de testes', 4, """
  ['TC15','Criar e excluir atividade','Lista pública reflete (7, depois 6)','RF21'],
  ['TC16','CLI: criar, atualizar, promover, rebaixar, listar','Papéis e dados conforme comandos','RF22; RN12'],
  ['TC17','CLI: senha curta; último superadmin; usuário inexistente','Erros específicos','RF22; RN02, RN14']]) + """
-<h2 class="s">15.3 Resultado</h2>
+<h2 class="s">15.3 Cenários ponta a ponta (Playwright)</h2>
+""" + tab(['ID','Cenário','Verificações','RF'], [
+ ['ES01','Páginas públicas','Seis rotas carregam sem erro de console e sem rolagem horizontal','RF01-RF05; OB2'],
+ ['ES02','Lazer','Cartão abre os detalhes e fecha com Esc','RF03'],
+ ['ES03','Tema','Alterna, persiste após recarregar e segue prefers-color-scheme','RF06'],
+ ['ES04','Cadastro e compra','Compra sem login leva ao login com retorno; cadastro, retorno a Ingressos, compra, QR Code e pedido listado','RF07, RF11-RF16'],
+ ['ES05','Validação de formulário','Senhas diferentes bloqueiam o cadastro','RF07; RN02'],
+ ['ES06','Painel administrativo','Usuário comum é barrado; superadmin criado pela CLI acessa, percorre as abas e cria uma atividade','RF17-RF22']]) + """
+<p>Cada cenário roda em dois perfis (desktop e celular), totalizando 12 execuções.</p>
+<h2 class="s">15.4 Resultado</h2>
 <pre><code>cd backend &amp;&amp; npm test
-# tests 5 · pass 5 · fail 0</code></pre>
-<h2 class="s">15.4 Verificação da interface</h2>
-<p>Um roteiro scriptado percorreu, em 1280 px e 390 px, cadastro, login com retorno à página de origem, compra, QR Code, painel (cinco abas e janelas de edição), alternância e persistência de tema e preferência de tema do sistema, registrando erros de console e rolagem horizontal. Resultado final: zero erros de console e zero estouros de largura. A verificação revelou e corrigiu, entre outros, o hero sobrepondo o menu, ícones do botão de tema deslocados por CSS legado e campos do login acinzentados no tema escuro.</p>
-<h2 class="s">15.5 Lacunas e plano</h2>
-<ul><li>Versionar os roteiros ponta a ponta e executá-los em integração contínua.</li><li>Testes de carga e de segurança (SAST, varredura de dependências automatizada).</li><li>Auditoria de acessibilidade (WCAG 2.2) com ferramentas e leitor de tela.</li></ul>
+# tests 5 · pass 5 · fail 0
+
+cd e2e &amp;&amp; npx playwright test
+# 12 passed (6 cenários × 2 perfis)</code></pre>
+<h2 class="s">15.5 Defeitos encontrados pelos testes</h2>
+<p>A verificação em navegador real revelou e corrigiu defeitos que a leitura do código não mostrava: o hero sobrepondo o menu, ícones do botão de tema deslocados por CSS legado, campos do login acinzentados no tema escuro e rótulos acessíveis (<code>aria-label</code>) que substituíam o texto visível de links e campos, contrariando o critério 2.5.3 da WCAG (rótulo no nome).</p>
+<h2 class="s">15.6 Lacunas e plano</h2>
+<ul><li>Executar o fluxo de CI no GitHub e acompanhar o resultado a cada alteração.</li><li>Testes de carga e de segurança (SAST); a varredura de dependências (npm audit) já faz parte do CI.</li><li>Auditoria de acessibilidade (WCAG 2.2) com ferramentas automatizadas e leitor de tela.</li></ul>
 """)
 
 TRACE = [
- ('RF01-RF04','UC01','RN08, RN15','GET /api/parque, /atividades, /ingressos/tipos','TC01, TC14'),
- ('RF05','UC01','RN17, RN18','estático (rodapé, Sobre, Ingressos)','Verificação de interface'),
- ('RF06','UC02','RN19','local (localStorage)','Verificação de interface'),
- ('RF07','UC03','RN01-RN03, RN12','POST /api/auth/registro','TC02-TC04'),
+ ('RF01-RF04','UC01','RN08, RN15','GET /api/parque, /atividades, /ingressos/tipos','TC01, TC14, ES01'),
+ ('RF05','UC01','RN17, RN18','estático (rodapé, Sobre, Ingressos)','ES01'),
+ ('RF06','UC02','RN19','local (localStorage)','ES03'),
+ ('RF07','UC03','RN01-RN03, RN12','POST /api/auth/registro','TC02-TC04, ES04, ES05'),
  ('RF08-RF09','UC04','—','POST /api/auth/login, GET /me','TC05, TC06'),
- ('RF10','UC04','—','POST /api/auth/esqueci-senha','Verificação de interface'),
- ('RF11','UC05','—','local (returnUrl seguro)','Verificação de interface'),
- ('RF12','UC05','RN04-RN08, RN10','POST /api/pedidos','TC07-TC09'),
- ('RF13-RF15','UC05, UC06','RN10, RN11, RN16','GET /pedidos/:id/qrcode, POST /reenviar','TC09, TC10'),
- ('RF16','UC07','RN11','GET /api/pedidos','TC09, TC10'),
- ('RF17-RF19','UC08','RN13','GET /admin/resumo, /pedidos, /usuarios; PATCH /usuarios/:id','TC11, TC12'),
- ('RF20','UC09','RN08','GET, POST, PUT /api/admin/tipos','TC13, TC14'),
- ('RF21','UC10','—','POST, PUT, DELETE /api/admin/atividades','TC15'),
- ('RF22','UC11','RN12, RN14','CLI','TC16, TC17'),
+ ('RF10','UC04','—','POST /api/auth/esqueci-senha','Inspeção (sem teste automatizado)'),
+ ('RF11','UC05','—','local (returnUrl seguro)','ES04'),
+ ('RF12','UC05','RN04-RN08, RN10','POST /api/pedidos','TC07-TC09, ES04'),
+ ('RF13-RF15','UC05, UC06','RN10, RN11, RN16','GET /pedidos/:id/qrcode, POST /reenviar','TC09, TC10, ES04'),
+ ('RF16','UC07','RN11','GET /api/pedidos','TC09, TC10, ES04'),
+ ('RF17-RF19','UC08','RN13','GET /admin/resumo, /pedidos, /usuarios; PATCH /usuarios/:id','TC11, TC12, ES06'),
+ ('RF20','UC09','RN08','GET, POST, PUT /api/admin/tipos','TC13, TC14, ES06'),
+ ('RF21','UC10','—','POST, PUT, DELETE /api/admin/atividades','TC15, ES06'),
+ ('RF22','UC11','RN12, RN14','CLI','TC16, TC17, ES06'),
 ]
 CAPS[16] = ('Matriz de rastreabilidade', 4, """
 <p>A matriz liga cada requisito a seus casos de uso, regras de negócio, pontos de implementação e casos de teste, permitindo analisar o impacto de mudanças e comprovar cobertura.</p>
-""" + tab(['Requisito','Caso de uso','Regras','Implementação','Verificação'], [list(r) for r in TRACE]) + nota('<strong>Cobertura:</strong> 22 de 22 requisitos funcionais possuem caso de uso e ao menos uma forma de verificação. Os requisitos de interface (RF01 a RF06, RF10 e RF11) são verificados por roteiro de navegador e ainda não possuem teste automatizado versionado.', 'verde'))
+""" + tab(['Requisito','Caso de uso','Regras','Implementação','Verificação'], [list(r) for r in TRACE]) + nota('<strong>Cobertura:</strong> 22 de 22 requisitos funcionais possuem caso de uso; 21 têm verificação automatizada (API, CLI ou ponta a ponta). A exceção é o RF10 (recuperação de senha simulada), verificado apenas por inspeção.', 'verde'))
 
 CAPS[17] = ('Implantação e operação', 4, """
 <h2 class="s">17.1 Serviços</h2>
@@ -566,6 +581,8 @@ CAPS[18] = ('Experiência do usuário e acessibilidade', 4, """
  ['Semântica e ARIA','role="dialog", aria-modal, aria-live em avisos, aria-pressed no tema','Aplicado'],
  ['Movimento reduzido','prefers-reduced-motion desativa animações','Aplicado'],
  ['Tamanho de alvos e reflow','Botões de 38 a 44 px; layout fluido sem rolagem horizontal','Aplicado'],
+ ['Nome acessível contém o texto visível (2.5.3)','aria-label redundantes removidos; links e campos usam o texto visível ou label','Aplicado'],
+ ['Operação por teclado','Botão de menu e "Esqueceu sua senha?" focáveis e acionáveis por Enter','Aplicado'],
  ['Contraste de cores','Paleta com texto claro sobre azul escuro e escuro sobre claro','Verificação visual; medição formal pendente'],
  ['Auditoria com leitor de tela','—','Pendente']]) + nota('Este documento não declara conformidade formal com a WCAG. As práticas acima foram aplicadas e inspecionadas, e a auditoria completa consta como evolução.', 'alerta'))
 
@@ -579,7 +596,7 @@ CAPS[19] = ('Riscos residuais, limitações e evolução', 4, """
  ['L5','Token em localStorage','Exposição em caso de XSS','Cookie HttpOnly + CSRF'],
  ['L6','SQLite com uma instância','Escala limitada','PostgreSQL e migrações versionadas'],
  ['L7','Sem trilha de auditoria administrativa','Pouca rastreabilidade de ações do admin','Registro de eventos administrativos'],
- ['L8','Build do Docker não validado no sandbox','Risco de ajuste fino na primeira execução','Executar em máquina com internet e CI']]) + """
+ ['L8','Build do Docker não validado no sandbox','Risco de ajuste fino na primeira execução','CI já define o build; executar em máquina com internet']]) + """
 <h2 class="s">19.2 Roteiro de evolução</h2>
 <div class="duas">
 <div class="cartao"><h4>Produto</h4><ul><li>Redefinição de senha por e-mail</li><li>Leitor de QR Code e baixa do ingresso</li><li>Calendário e capacidade por data</li><li>Internacionalização (inglês e espanhol)</li></ul></div>

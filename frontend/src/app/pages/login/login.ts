@@ -15,15 +15,15 @@ import { Auth } from '../../core/auth';
           <h1>Acessar Conta</h1>
           <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
             <label class="d-block" for="email">E-mail:</label>
-            <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" aria-label="Digite seu e-mail" autocomplete="email" />
+            <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" autocomplete="email" />
             @if (inv('email')) { <span class="erro-form">Informe um e-mail válido.</span> }
             <label class="d-block" for="senha">Senha:</label>
-            <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" placeholder="  Sua senha" aria-label="Digite sua senha" autocomplete="current-password" />
+            <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" placeholder="  Sua senha" autocomplete="current-password" />
             @if (inv('senha')) { <span class="erro-form">Informe a senha.</span> }
             <button type="button" class="ver-senha" (click)="verSenha.set(!verSenha())"><i class="bi" [class.bi-eye]="!verSenha()" [class.bi-eye-slash]="verSenha()"></i> {{ verSenha() ? 'Ocultar senha' : 'Mostrar senha' }}</button>
 
             <div class="esqueceu-senha">
-              <a class="color-white" (click)="esqueci()" aria-label="Recuperar senha">Esqueceu sua senha?</a>
+              <a class="color-white" role="button" tabindex="0" (click)="esqueci()" (keydown.enter)="esqueci()">Esqueceu sua senha?</a>
             </div>
             @if (erro()) { <span class="erro-form">{{ erro() }}</span> }
             @if (info()) { <span class="sucesso-form">{{ info() }}</span> }
@@ -32,7 +32,7 @@ import { Auth } from '../../core/auth';
           </form>
 
           <div class="registro-login-link color-white text-center">
-            <p>Não possui uma conta? <a class="color-white" routerLink="/registre-se" [queryParams]="{ returnUrl: rota.snapshot.queryParamMap.get('returnUrl') }" aria-label="Ir para a página de registro">Registre-se</a></p>
+            <p>Não possui uma conta? <a class="color-white" routerLink="/registre-se" [queryParams]="{ returnUrl: rota.snapshot.queryParamMap.get('returnUrl') }">Registre-se</a></p>
           </div>
         </div>
       </section>
