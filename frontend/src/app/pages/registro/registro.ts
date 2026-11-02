@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { destinoSeguro } from '../../core/guards';
 import { mensagemErro } from '../../core/api';
 import { Auth } from '../../core/auth';
 
@@ -37,7 +38,7 @@ const senhasIguais = (g: AbstractControl): ValidationErrors | null =>
               <div>
                 <label for="senha">Crie uma Senha:</label>
                 <input type="password" id="senha" formControlName="senha" aria-label="Crie uma senha" autocomplete="new-password" />
-                @if (inv('senha')) { <span class="erro-form">Mínimo de 6 caracteres.</span> }
+                @if (inv('senha')) { <span class="erro-form">Entre 8 e 72 caracteres.</span> }
               </div>
               <div class="confirmacao-senha">
                 <label for="confirmacao-senha">Confirme sua Senha:</label>
@@ -66,12 +67,13 @@ export class Registro {
   private fb = inject(FormBuilder);
   private auth = inject(Auth);
   private router = inject(Router);
+  private rota = inject(ActivatedRoute);
   form = this.fb.nonNullable.group(
     {
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required, Validators.pattern(/^\d{10,11}$/)]],
-      senha: ['', [Validators.required, Validators.minLength(6)]],
+      senha: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72)]],
       confirmacaoSenha: ['', Validators.required],
     },
     { validators: senhasIguais },
@@ -87,7 +89,7 @@ export class Registro {
     this.enviando.set(true);
     const v = { ...this.form.getRawValue(), telefone: this.form.getRawValue().telefone.replace(/\D/g, '') };
     this.auth.registrar(v).subscribe({
-      next: () => this.router.navigateByUrl('/'),
+      next: () => this.router.navigateByUrl(destinoSeguro(this.rota.snapshot.queryParamMap.get('returnUrl'))),
       error: (e) => { this.enviando.set(false); this.erro.set(mensagemErro(e)); },
     });
   }

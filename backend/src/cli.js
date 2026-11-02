@@ -1,9 +1,3 @@
-#!/usr/bin/env node
-// Gerenciamento de superadmins via terminal.
-//   node src/cli.js superadmin criar --email a@b.com --nome "Fulano" [--senha ...] [--telefone 45999990000]
-//   node src/cli.js superadmin atualizar --email a@b.com [--nome ..] [--novo-email ..] [--senha ..] [--telefone ..]
-//   node src/cli.js superadmin promover|rebaixar --email a@b.com
-//   node src/cli.js superadmin listar
 import path from 'node:path';
 import readline from 'node:readline';
 import { fileURLToPath } from 'node:url';
@@ -53,7 +47,7 @@ async function obterSenha(opts, confirmar) {
     senha = await pedirSenha('Senha: ');
     if (confirmar && process.stdin.isTTY && (await pedirSenha('Confirme a senha: ')) !== senha) throw new Error('As senhas não conferem');
   }
-  if (senha.length < 6) throw new Error('A senha deve ter ao menos 6 caracteres');
+  if (senha.length < 8 || senha.length > 72) throw new Error('A senha deve ter entre 8 e 72 caracteres');
   return senha;
 }
 
@@ -79,12 +73,12 @@ export async function run(argv, db, log = console.log) {
   if (cmd === 'criar') {
     if (existente) {
       db.prepare("UPDATE usuarios SET papel='superadmin' WHERE id=?").run(existente.id);
-      if (opts.senha !== undefined) db.prepare('UPDATE usuarios SET senha_hash=? WHERE id=?').run(bcrypt.hashSync(await obterSenha(opts), 10), existente.id);
+      if (opts.senha !== undefined) db.prepare('UPDATE usuarios SET senha_hash=? WHERE id=?').run(bcrypt.hashSync(await obterSenha(opts), 12), existente.id);
       log(`Usuário existente ${email} promovido a superadmin.`);
       return 0;
     }
     if (!opts.nome || opts.nome.trim().length < 3) throw new Error('Informe --nome (mínimo 3 caracteres)');
-    const hash = bcrypt.hashSync(await obterSenha(opts, true), 10);
+    const hash = bcrypt.hashSync(await obterSenha(opts, true), 12);
     db.prepare("INSERT INTO usuarios (nome,email,telefone,senha_hash,papel) VALUES (?,?,?,?, 'superadmin')").run(opts.nome.trim(), email, opts.telefone ?? '', hash);
     log(`Superadmin ${email} criado.`);
     return 0;
@@ -111,7 +105,7 @@ export async function run(argv, db, log = console.log) {
       if (db.prepare('SELECT 1 FROM usuarios WHERE email=? AND id<>?').get(ne, existente.id)) throw new Error('Já existe usuário com o novo e-mail');
       upd.email = ne;
     }
-    if (opts.senha !== undefined || (!Object.keys(upd).length)) upd.senha_hash = bcrypt.hashSync(await obterSenha(opts, true), 10);
+    if (opts.senha !== undefined || (!Object.keys(upd).length)) upd.senha_hash = bcrypt.hashSync(await obterSenha(opts, true), 12);
     const cols = Object.keys(upd);
     db.prepare(`UPDATE usuarios SET ${cols.map((c) => `${c}=?`).join(',')} WHERE id=?`).run(...cols.map((c) => upd[c]), existente.id);
     log(`Superadmin ${email} atualizado (${cols.map((c) => (c === 'senha_hash' ? 'senha' : c)).join(', ')}).`);

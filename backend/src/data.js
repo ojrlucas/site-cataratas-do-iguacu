@@ -41,7 +41,6 @@ export const atividades = [
     descricao: 'À medida que o sol se despede do dia sobre as majestosas Cataratas do Iguaçu, o céu se inflama em tons vibrantes de âmbar, escarlate e púrpura. A névoa que emana das quedas captura essa paleta incandescente, pintando o cenário com pinceladas de luz dourada e sombras dançantes. O rugido das águas se mistura ao silêncio contemplativo do final da tarde, criando uma atmosfera mágica e efêmera. Contemplar o pôr do sol neste lugar icônico é presenciar um balé de cores e sons, uma despedida gloriosa do astro-rei que deixa uma marca indelével na alma.' },
 ];
 
-// Valores fictícios (site de estudos)
 export const tiposIngresso = [
   { id: 'inteira', nome: 'Inteira', precoCentavos: 10000, imagem: 'imagens/lazer-1.png',
     descricao: 'Ingresso de acesso ao Parque Nacional do Iguaçu, válido para o dia escolhido. Inclui o transporte interno do parque e o acesso às passarelas e mirantes das Cataratas do Iguaçu.' },

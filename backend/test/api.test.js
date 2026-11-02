@@ -15,7 +15,7 @@ const call = async (p, opts = {}, token) => {
   return { status: r.status, body: txt ? JSON.parse(txt) : null };
 };
 const post = (p, b, t) => call(p, { method: 'POST', body: JSON.stringify(b) }, t);
-const reg = { nome: 'Maria Silva', email: 'Maria@Ex.com', telefone: '45999990000', senha: 'segredo1', confirmacaoSenha: 'segredo1' };
+const reg = { nome: 'Maria Silva', email: 'Maria@Ex.com', telefone: '45999990000', senha: 'segredo123', confirmacaoSenha: 'segredo123' };
 const amanha = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
 
 test.after(() => server.close());
@@ -34,14 +34,14 @@ test('registro, login e validações', async () => {
   assert.equal(r.body.usuario.email, 'maria@ex.com');
   assert.equal((await post('/auth/registro', reg)).status, 409);
   assert.equal((await post('/auth/login', { email: 'maria@ex.com', senha: 'errada' })).status, 401);
-  const l = await post('/auth/login', { email: 'maria@ex.com', senha: 'segredo1' });
+  const l = await post('/auth/login', { email: 'maria@ex.com', senha: 'segredo123' });
   assert.equal(l.status, 200);
   assert.equal((await call('/auth/me', {}, l.body.token)).body.nome, 'Maria Silva');
   assert.equal((await call('/auth/me')).status, 401);
 });
 
 test('pedidos e QR code', async () => {
-  const { body } = await post('/auth/login', { email: 'maria@ex.com', senha: 'segredo1' });
+  const { body } = await post('/auth/login', { email: 'maria@ex.com', senha: 'segredo123' });
   const t = body.token;
   assert.equal((await post('/pedidos', { tipoId: 'inteira', quantidade: 1, dataVisita: amanha })).status, 401);
   assert.equal((await post('/pedidos', { tipoId: 'x', quantidade: 1, dataVisita: amanha }, t)).status, 400);
@@ -62,7 +62,7 @@ test('pedidos e QR code', async () => {
 });
 
 test('superadmin: acesso e gestão', async () => {
-  const user = (await post('/auth/login', { email: 'maria@ex.com', senha: 'segredo1' })).body.token;
+  const user = (await post('/auth/login', { email: 'maria@ex.com', senha: 'segredo123' })).body.token;
   assert.equal((await call('/admin/resumo', {}, user)).status, 403);
   assert.equal((await call('/admin/resumo')).status, 401);
   db.prepare("UPDATE usuarios SET papel='superadmin' WHERE email='maria@ex.com'").run();

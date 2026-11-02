@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Auth } from '../core/auth';
 
 @Component({
@@ -20,6 +20,9 @@ import { Auth } from '../core/auth';
           <li><a class="color-white text-decoration-none" routerLink="/sobre" aria-label="Acessar a página com informações sobre as Cataratas do Iguaçu"><i class="bi bi-info-circle-fill"></i> Sobre</a></li>
           <li><a class="color-white text-decoration-none" routerLink="/lazer" aria-label="Acessar a página com informações sobre as atividades de lazer das Cataratas do Iguaçu"><i class="bi bi-tree-fill"></i> Lazer</a></li>
           <li><a class="color-white text-decoration-none" routerLink="/ingressos" aria-label="Acessar a página de ingressos"><i class="bi bi-ticket-perforated-fill"></i> Ingressos</a></li>
+          @if (auth.admin()) {
+            <li><a class="color-white text-decoration-none" routerLink="/admin" aria-label="Abrir o painel administrativo"><i class="bi bi-shield-lock-fill"></i> Admin</a></li>
+          }
           <li class="login-registro w-100 d-flex justify-content-center">
             <div>
               @if (auth.usuario(); as u) {
@@ -42,7 +45,6 @@ import { Auth } from '../core/auth';
 })
 export class Nav {
   auth = inject(Auth);
-  private router = inject(Router);
   aberto = signal(false);
   primeiroNome = (n: string) => n.split(' ')[0];
   sair() { this.auth.sair(); }

@@ -7,11 +7,11 @@ test('CLI superadmin: criar, atualizar, promover, rebaixar, listar', async () =>
   const db = openDb(':memory:');
   const out = [];
   const log = (m) => out.push(m);
-  await run(['superadmin', 'criar', '--email', 'Admin@Ex.com', '--nome', 'Admin Geral', '--senha', 'senha123'], db, log);
+  await run(['superadmin', 'criar', '--email', 'Admin@Ex.com', '--nome', 'Admin Geral', '--senha', 'senha1234'], db, log);
   const u = db.prepare('SELECT * FROM usuarios WHERE email=?').get('admin@ex.com');
   assert.equal(u.papel, 'superadmin');
-  await assert.rejects(run(['superadmin', 'criar', '--email', 'b@ex.com', '--nome', 'Bob Bob', '--senha', '123'], db, log), /ao menos 6/);
-  await run(['superadmin', 'atualizar', '--email', 'admin@ex.com', '--senha', 'novasenha', '--novo-email', 'root@ex.com', '--nome', 'Root'], db, log);
+  await assert.rejects(run(['superadmin', 'criar', '--email', 'b@ex.com', '--nome', 'Bob Bob', '--senha', '1234'], db, log), /entre 8 e 72/);
+  await run(['superadmin', 'atualizar', '--email', 'admin@ex.com', '--senha', 'novasenha1', '--novo-email', 'root@ex.com', '--nome', 'Root'], db, log);
   const r = db.prepare('SELECT * FROM usuarios WHERE email=?').get('root@ex.com');
   assert.equal(r.nome, 'Root');
   assert.notEqual(r.senha_hash, u.senha_hash);

@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { destinoSeguro } from '../../core/guards';
 import { Api, mensagemErro } from '../../core/api';
 import { Auth } from '../../core/auth';
 
@@ -30,7 +31,7 @@ import { Auth } from '../../core/auth';
           </form>
 
           <div class="registro-login-link color-white text-center">
-            <p>Não possui uma conta? <a class="color-white" routerLink="/registre-se" aria-label="Ir para a página de registro">Registre-se</a></p>
+            <p>Não possui uma conta? <a class="color-white" routerLink="/registre-se" [queryParams]="{ returnUrl: rota.snapshot.queryParamMap.get('returnUrl') }" aria-label="Ir para a página de registro">Registre-se</a></p>
           </div>
         </div>
       </section>
@@ -46,6 +47,7 @@ export class Login {
   private auth = inject(Auth);
   private api = inject(Api);
   private router = inject(Router);
+  rota = inject(ActivatedRoute);
   form = this.fb.nonNullable.group({ email: ['', [Validators.required, Validators.email]], senha: ['', Validators.required] });
   enviando = signal(false);
   erro = signal('');
@@ -59,7 +61,7 @@ export class Login {
     this.enviando.set(true);
     const { email, senha } = this.form.getRawValue();
     this.auth.login(email, senha).subscribe({
-      next: () => this.router.navigateByUrl('/'),
+      next: () => this.router.navigateByUrl(destinoSeguro(this.rota.snapshot.queryParamMap.get('returnUrl'))),
       error: (e) => { this.enviando.set(false); this.erro.set(mensagemErro(e)); },
     });
   }

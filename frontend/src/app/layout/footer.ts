@@ -26,7 +26,7 @@ import { Api, Parque } from '../core/api';
         </section>
       </div>
       <section class="rodape-autoral mt-4 d-flex justify-content-center text-center">
-        <p>&copy; 2025 Parque Nacional do Iguaçu. Feito para fins de estudo (não oficial).</p>
+        <p>Projeto de portfólio criado por um fã em homenagem às Cataratas do Iguaçu. Não representa o site oficial do parque, não vende ingressos reais e não possui qualquer vínculo com o Parque Nacional do Iguaçu.</p>
       </section>
     </footer>
   `,

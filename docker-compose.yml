@@ -3,10 +3,26 @@ services:
     build: ./backend
     restart: unless-stopped
     environment:
-      # Defina JWT_SECRET no ambiente ou em um arquivo .env (veja .env.example)
-      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET (veja .env.example)}
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET com ao menos 32 caracteres}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-Cataratas do Iguaçu <nao-responda@catarataspni.com.br>}
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
     volumes:
       - dados:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      - mailpit
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
       interval: 15s
@@ -17,10 +33,25 @@ services:
     build: ./frontend
     restart: unless-stopped
     ports:
-      - "${PORT:-8080}:80"
+      - "${PORT:-8080}:8080"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     depends_on:
       backend:
         condition: service_healthy
 
+  mailpit:
+    image: axllent/mailpit:v1.21
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"
+    volumes:
+      - emails:/data
+    environment:
+      MP_DATABASE: /data/mailpit.db
+
 volumes:
   dados:
+  emails:

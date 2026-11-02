@@ -16,14 +16,14 @@ const registroSchema = z
     nome: z.string().trim().min(3, 'Informe o nome completo'),
     email: z.string().trim().toLowerCase().email('E-mail inválido'),
     telefone: z.string().trim().regex(/^\d{10,11}$/, 'Telefone deve ter 10 ou 11 dígitos (com DDD)'),
-    senha: z.string().min(6, 'A senha deve ter ao menos 6 caracteres'),
+    senha: z.string().min(8, 'A senha deve ter ao menos 8 caracteres').max(72, 'A senha deve ter no máximo 72 caracteres'),
     confirmacaoSenha: z.string(),
   })
   .refine((d) => d.senha === d.confirmacaoSenha, { message: 'As senhas não conferem', path: ['confirmacaoSenha'] });
 
 const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email('E-mail inválido'),
-  senha: z.string().min(1, 'Informe a senha'),
+  senha: z.string().min(1, 'Informe a senha').max(72, 'Senha inválida'),
 });
 
 const pedidoSchema = z.object({
@@ -31,6 +31,9 @@ const pedidoSchema = z.object({
   quantidade: z.number().int().min(1, 'Mínimo 1 ingresso').max(10, 'Máximo 10 ingressos por pedido'),
   dataVisita: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
 });
+
+const BCRYPT_COST = 12;
+const HASH_FALSO = bcrypt.hashSync('senha-inexistente', BCRYPT_COST);
 
 class HttpError extends Error {
   constructor(status, message, campos) {
@@ -45,8 +48,14 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
   app.use(helmet({
+    referrerPolicy: { policy: 'no-referrer' },
+    crossOriginOpenerPolicy: { policy: 'same-origin' },
     contentSecurityPolicy: {
       directives: {
+        frameAncestors: ["'none'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
         defaultSrc: ["'self'"],
         imgSrc: ["'self'", 'data:'],
         styleSrc: ["'self'", "'unsafe-inline'"],
@@ -61,7 +70,7 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
   app.use(express.json({ limit: '50kb' }));
   app.use('/api', rateLimit({ windowMs: 60_000, limit: rateLimitMax, standardHeaders: true, legacyHeaders: false }));
 
-  const assinar = (u) => jwt.sign({ sub: u.id }, jwtSecret, { expiresIn: '7d' });
+  const assinar = (u) => jwt.sign({ sub: u.id }, jwtSecret, { algorithm: 'HS256', expiresIn: '7d' });
   const publico = (u) => ({ id: u.id, nome: u.nome, email: u.email, telefone: u.telefone, papel: u.papel });
   const validar = (schema, body) => {
     const r = schema.safeParse(body);
@@ -78,7 +87,7 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
       const h = req.headers.authorization || '';
       const token = h.startsWith('Bearer ') ? h.slice(7) : null;
       if (!token) throw new Error();
-      const { sub } = jwt.verify(token, jwtSecret);
+      const { sub } = jwt.verify(token, jwtSecret, { algorithms: ['HS256'] });
       const u = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(sub);
       if (!u) throw new Error();
       req.usuario = u;
@@ -102,7 +111,7 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
     const d = validar(registroSchema, req.body);
     if (db.prepare('SELECT 1 FROM usuarios WHERE email = ?').get(d.email))
       throw new HttpError(409, 'Já existe uma conta com este e-mail', { email: 'E-mail já cadastrado' });
-    const hash = bcrypt.hashSync(d.senha, 10);
+    const hash = bcrypt.hashSync(d.senha, BCRYPT_COST);
     const r = db.prepare('INSERT INTO usuarios (nome, email, telefone, senha_hash) VALUES (?,?,?,?)').run(d.nome, d.email, d.telefone, hash);
     const u = db.prepare('SELECT * FROM usuarios WHERE id = ?').get(r.lastInsertRowid);
     res.status(201).json({ token: assinar(u), usuario: publico(u) });
@@ -111,13 +120,14 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
   api.post('/auth/login', authLimiter, (req, res) => {
     const d = validar(loginSchema, req.body);
     const u = db.prepare('SELECT * FROM usuarios WHERE email = ?').get(d.email);
-    if (!u || !bcrypt.compareSync(d.senha, u.senha_hash)) throw new HttpError(401, 'E-mail ou senha incorretos');
+    const hashAlvo = u ? u.senha_hash : HASH_FALSO;
+    const confere = bcrypt.compareSync(d.senha, hashAlvo);
+    if (!u || !confere) throw new HttpError(401, 'E-mail ou senha incorretos');
     res.json({ token: assinar(u), usuario: publico(u) });
   });
 
   api.post('/auth/esqueci-senha', authLimiter, (req, res) => {
     validar(z.object({ email: z.string().trim().email('E-mail inválido') }), req.body);
-    // Site de estudos: não envia e-mail; resposta genérica evita enumeração de contas.
     res.json({ mensagem: 'Se o e-mail estiver cadastrado, enviaremos as instruções de recuperação.' });
   });
 
@@ -144,7 +154,7 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
     const d = validar(pedidoSchema, req.body);
     const tipo = db.prepare('SELECT * FROM tipos_ingresso WHERE id = ? AND ativo = 1').get(d.tipoId);
     if (!tipo) throw new HttpError(400, 'Tipo de ingresso inexistente', { tipoId: 'Tipo inexistente' });
-    const ontem = new Date(Date.now() - 864e5).toISOString().slice(0, 10); // tolera fuso horário
+    const ontem = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
     if (d.dataVisita < ontem || Number.isNaN(Date.parse(d.dataVisita)))
       throw new HttpError(400, 'A data da visita não pode estar no passado', { dataVisita: 'Data no passado' });
     const codigo = 'CPI-' + crypto.randomBytes(5).toString('hex').toUpperCase();
@@ -177,7 +187,6 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
     res.json({ mensagem: `Comprovante enviado para ${req.usuario.email}` });
   });
 
-  // ---------- Superadmin ----------
   const admin = express.Router();
   admin.use(auth, (req, _res, next) =>
     req.usuario.papel === 'superadmin' ? next() : next(new HttpError(403, 'Acesso restrito a superadmins')));
@@ -189,7 +198,7 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
       pedidos: q('SELECT COUNT(*) c FROM pedidos').c,
       ingressos: q('SELECT COALESCE(SUM(quantidade),0) c FROM pedidos').c,
       receitaCentavos: q('SELECT COALESCE(SUM(total_centavos),0) c FROM pedidos').c,
-      hoje: q(`SELECT COUNT(*) c FROM pedidos WHERE date(criado_em) = '${hojeStr()}'`).c,
+      hoje: db.prepare('SELECT COUNT(*) c FROM pedidos WHERE date(criado_em) = ?').get(hojeStr()).c,
     });
   });
 
@@ -276,7 +285,6 @@ export function createApp({ db, jwtSecret, staticDir, mailer, rateLimitMax = 300
     app.get(/^\/(?!api\/).*/, (_req, res) => res.sendFile(path.resolve(staticDir, 'index.html')));
   }
 
-  // eslint-disable-next-line no-unused-vars
   app.use((err, _req, res, _next) => {
     if (err instanceof HttpError) return res.status(err.status).json({ erro: err.message, campos: err.campos });
     if (err.type === 'entity.parse.failed') return res.status(400).json({ erro: 'JSON inválido' });

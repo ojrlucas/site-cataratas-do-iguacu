@@ -3,7 +3,7 @@ import { HttpClient, HttpInterceptorFn } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 
-export interface Usuario { id: number; nome: string; email: string; telefone: string }
+export interface Usuario { id: number; nome: string; email: string; telefone: string; papel: 'usuario' | 'superadmin' }
 interface Sessao { token: string; usuario: Usuario }
 const CHAVE = 'cpi_sessao';
 
@@ -18,12 +18,19 @@ export class Auth {
   private sessao = signal<Sessao | null>(ler());
   usuario = computed(() => this.sessao()?.usuario ?? null);
   logado = computed(() => !!this.sessao());
+  admin = computed(() => this.sessao()?.usuario.papel === 'superadmin');
   token = () => this.sessao()?.token ?? null;
 
   private salvar = (s: Sessao) => {
-    try { localStorage.setItem(CHAVE, JSON.stringify(s)); } catch { /* ignore */ }
+    try { localStorage.setItem(CHAVE, JSON.stringify(s)); } catch {}
     this.sessao.set(s);
   };
+
+  atualizar() {
+    const s = this.sessao();
+    if (!s) return;
+    this.http.get<Usuario>('/api/auth/me').subscribe({ next: (usuario) => this.salvar({ token: s.token, usuario }), error: () => {} });
+  }
 
   login(email: string, senha: string) {
     return this.http.post<Sessao>('/api/auth/login', { email, senha }).pipe(tap(this.salvar));
@@ -32,7 +39,7 @@ export class Auth {
     return this.http.post<Sessao>('/api/auth/registro', dados).pipe(tap(this.salvar));
   }
   sair(redirecionar = true) {
-    try { localStorage.removeItem(CHAVE); } catch { /* ignore */ }
+    try { localStorage.removeItem(CHAVE); } catch {}
     this.sessao.set(null);
     if (redirecionar) this.router.navigateByUrl('/');
   }
