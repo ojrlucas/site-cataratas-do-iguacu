@@ -5,10 +5,12 @@ import { Router, RouterLink } from '@angular/router';
 import { Api, Pedido, PedidoQr, TipoIngresso, mensagemErro } from '../../core/api';
 import { Auth } from '../../core/auth';
 import { Modal } from '../../core/modal';
+import { Reveal } from '../../core/reveal';
+import { Toast } from '../../core/toast';
 
 @Component({
   selector: 'app-ingressos',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, Modal],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, Modal, Reveal],
   templateUrl: './ingressos.html',
 })
 export class Ingressos {
@@ -16,6 +18,8 @@ export class Ingressos {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   auth = inject(Auth);
+  private toast = inject(Toast);
+  carregando = signal(true);
 
   tipos = signal<TipoIngresso[]>([]);
   pedidos = signal<Pedido[]>([]);
@@ -32,7 +36,7 @@ export class Ingressos {
   form = this.fb.nonNullable.group({ dataVisita: [this.hoje, Validators.required] });
 
   constructor() {
-    this.api.tipos().subscribe({ next: (t) => this.tipos.set(t), error: () => this.erro.set('Não foi possível carregar os ingressos.') });
+    this.api.tipos().subscribe({ next: (t) => { this.tipos.set(t); this.carregando.set(false); }, error: () => { this.erro.set('Não foi possível carregar os ingressos.'); this.carregando.set(false); } });
     this.carregarPedidos();
   }
 
@@ -69,6 +73,7 @@ export class Ingressos {
         this.enviando.set(false);
         this.comprando.set(null);
         this.carregarPedidos();
+        this.toast.ok('Compra confirmada! Confira seu e-mail.');
         this.verQr(p.id);
       },
       error: (e) => {
@@ -90,12 +95,12 @@ export class Ingressos {
     this.aviso.set('');
     this.api.reenviar(id).subscribe({
       next: (r) => {
-        this.aviso.set(r.mensagem);
+        this.toast.ok(r.mensagem);
         this.carregarPedidos();
         const atual = this.comprovante();
         if (atual) this.comprovante.set({ qr: { ...atual.qr, emailEnviado: true } });
       },
-      error: (e) => this.aviso.set(mensagemErro(e)),
+      error: (e) => this.toast.erro(mensagemErro(e)),
     });
   }
 }

@@ -16,6 +16,7 @@ import { RouterLink } from '@angular/router';
     </div>
 
     <section class="pagina" style="max-width: 860px">
+      <p class="eyebrow">Conheça</p>
       <h2 class="secao-titulo">o <b>parque...</b></h2>
 
       <div class="aviso-fa mb-4">

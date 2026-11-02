@@ -37,16 +37,17 @@ const senhasIguais = (g: AbstractControl): ValidationErrors | null =>
             <div class="senha-confirmacao-container">
               <div>
                 <label for="senha">Crie uma Senha:</label>
-                <input type="password" id="senha" formControlName="senha" aria-label="Crie uma senha" autocomplete="new-password" />
+                <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" aria-label="Crie uma senha" autocomplete="new-password" />
                 @if (inv('senha')) { <span class="erro-form">Entre 8 e 72 caracteres.</span> }
               </div>
               <div class="confirmacao-senha">
                 <label for="confirmacao-senha">Confirme sua Senha:</label>
-                <input type="password" id="confirmacao-senha" formControlName="confirmacaoSenha" aria-label="Confirme sua senha" autocomplete="new-password" />
+                <input [type]="verSenha() ? 'text' : 'password'" id="confirmacao-senha" formControlName="confirmacaoSenha" aria-label="Confirme sua senha" autocomplete="new-password" />
                 @if (form.hasError('senhasDiferentes') && form.controls.confirmacaoSenha.touched) { <span class="erro-form">As senhas não conferem.</span> }
               </div>
             </div>
 
+            <button type="button" class="ver-senha" (click)="verSenha.set(!verSenha())"><i class="bi" [class.bi-eye]="!verSenha()" [class.bi-eye-slash]="verSenha()"></i> {{ verSenha() ? 'Ocultar senha' : 'Mostrar senha' }}</button>
             @if (erro()) { <span class="erro-form">{{ erro() }}</span> }
             <button class="form color-white" type="submit" [disabled]="enviando()">{{ enviando() ? 'Criando...' : 'Registre-se' }}</button>
           </form>
@@ -79,6 +80,7 @@ export class Registro {
     { validators: senhasIguais },
   );
   enviando = signal(false);
+  verSenha = signal(false);
   erro = signal('');
   inv(c: 'nome' | 'email' | 'telefone' | 'senha') { const x = this.form.controls[c]; return x.invalid && (x.touched || x.dirty); }
 

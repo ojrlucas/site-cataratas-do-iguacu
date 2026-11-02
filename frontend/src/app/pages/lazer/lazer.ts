@@ -2,10 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Api, Atividade } from '../../core/api';
 import { Modal } from '../../core/modal';
+import { Reveal } from '../../core/reveal';
 
 @Component({
   selector: 'app-lazer',
-  imports: [RouterLink, Modal],
+  imports: [RouterLink, Modal, Reveal],
   template: `
     <section class="bg-titulo d-flex justify-content-center align-items-center flex-column color-white">
       <div class="titulo">
@@ -21,13 +22,17 @@ import { Modal } from '../../core/modal';
     </section>
 
     <section class="pagina">
+      <p class="eyebrow">Experiências</p>
       <h2 class="secao-titulo"><b>lazer?</b> o lugar é aqui!</h2>
       <p class="secao-sub">Escolha uma experiência e descubra o Parque Nacional do Iguaçu de um jeito diferente.</p>
 
       @if (erro()) { <p class="erro-pagina">Não foi possível carregar as atividades.</p> }
       <div class="grade">
-        @for (a of atividades(); track a.id) {
-          <article class="cartao">
+        @if (carregando()) {
+          @for (s of [1, 2, 3]; track s) { <div class="esqueleto"></div> }
+        }
+        @for (a of atividades(); track a.id; let i = $index) {
+          <article class="cartao" appReveal [style.--i]="i">
             <div class="cartao-img">
               <img [src]="a.imagem" [alt]="a.alt" loading="lazy" />
               <h3>{{ a.titulo }}</h3>
@@ -57,9 +62,10 @@ import { Modal } from '../../core/modal';
 export class Lazer {
   atividades = signal<Atividade[]>([]);
   erro = signal(false);
+  carregando = signal(true);
   aberta = signal<Atividade | null>(null);
 
   constructor() {
-    inject(Api).atividades().subscribe({ next: (a) => this.atividades.set(a), error: () => this.erro.set(true) });
+    inject(Api).atividades().subscribe({ next: (a) => { this.atividades.set(a); this.carregando.set(false); }, error: () => { this.erro.set(true); this.carregando.set(false); } });
   }
 }

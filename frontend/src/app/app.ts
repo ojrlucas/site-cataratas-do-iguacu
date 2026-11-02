@@ -4,11 +4,13 @@ import { filter } from 'rxjs';
 import { Nav } from './layout/nav';
 import { Footer } from './layout/footer';
 import { Auth } from './core/auth';
+import { Toasts } from './core/toast';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Nav, Footer],
+  imports: [RouterOutlet, Nav, Footer, Toasts],
   template: `
+    <app-toasts />
     @if (semLayout()) {
       <router-outlet />
     } @else {

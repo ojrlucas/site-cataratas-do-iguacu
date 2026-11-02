@@ -9,6 +9,7 @@
 </div>
 
 <section class="pagina">
+  <p class="eyebrow">Entradas</p>
   <h2 class="secao-titulo">seus <b>ingressos</b></h2>
   <p class="secao-sub">Escolha o tipo de ingresso, a data e receba o comprovante com QR Code por e-mail.</p>
   <div class="aviso-fa mb-4"><i class="bi bi-info-circle-fill"></i>Projeto de portfólio feito por um fã. Nenhuma compra é real e nenhum pagamento é cobrado.</div>
@@ -16,8 +17,9 @@
   @if (erro()) { <p class="erro-pagina">{{ erro() }}</p> }
 
   <div class="grade">
-    @for (t of tipos(); track t.id) {
-      <article class="ingresso">
+    @if (carregando()) { @for (s of [1, 2]; track s) { <div class="esqueleto"></div> } }
+    @for (t of tipos(); track t.id; let i = $index) {
+      <article class="ingresso" appReveal [style.--i]="i">
         <div class="ingresso-topo">
           <small>Parque Nacional do Iguaçu</small>
           <h3>{{ t.nome }}</h3>
@@ -34,13 +36,13 @@
     }
   </div>
 
-  <h2 class="secao-titulo" style="margin-top: 56px">meus <b>pedidos</b></h2>
+  <p class="eyebrow" style="margin-top: 64px">Histórico</p>
+  <h2 class="secao-titulo">meus <b>pedidos</b></h2>
   @if (!auth.logado()) {
-    <p class="vazio">Para comprar e acompanhar seus ingressos, <a class="azul fw-bold" routerLink="/login" [queryParams]="{ returnUrl: '/ingressos' }">faça login</a> ou <a class="azul fw-bold" routerLink="/registre-se">registre-se</a>.</p>
+    <div class="vazio"><i class="bi bi-person-lock"></i><p>Para comprar e acompanhar seus ingressos, <a class="azul fw-bold" routerLink="/login" [queryParams]="{ returnUrl: '/ingressos' }">faça login</a> ou <a class="azul fw-bold" routerLink="/registre-se">registre-se</a>.</p></div>
   } @else if (pedidos().length === 0) {
-    <p class="vazio">Você ainda não possui pedidos.</p>
+    <div class="vazio"><i class="bi bi-ticket-perforated"></i><p>Você ainda não possui pedidos.</p></div>
   } @else {
-    @if (aviso()) { <p class="msg-ok" style="max-width: 760px; margin: 0 auto 14px">{{ aviso() }}</p> }
     <div class="pedidos">
       @for (p of pedidos(); track p.id) {
         <div class="pedido">
@@ -97,7 +99,6 @@
       } @else {
         <p class="msg-erro">Não conseguimos enviar o e-mail agora. Você pode tentar novamente.</p>
       }
-      @if (aviso()) { <p class="msg-ok">{{ aviso() }}</p> }
       <div class="qr-acoes">
         <button type="button" class="btn-cpi claro" (click)="reenviar(c.qr.id)"><i class="bi bi-envelope"></i> Reenviar e-mail</button>
         <button type="button" class="btn-cpi" (click)="comprovante.set(null)">Fechar</button>

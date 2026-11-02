@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../core/auth';
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   template: `
     <nav class="navbar d-flex align-items-center position-fixed">
       <section class="nav-logo">
@@ -16,12 +16,12 @@ import { Auth } from '../core/auth';
       <section class="nav-links d-flex align-items-center">
         <i (click)="aberto.set(!aberto())" class="bi bi-list color-white" role="button" aria-label="Abrir menu"></i>
         <ul id="nav-links-lista" class="list-unstyled w-100" [class.aberto]="aberto()" (click)="aberto.set(false)">
-          <li><a class="color-white text-decoration-none" routerLink="/" aria-label="Voltar a página inicial"><i class="bi bi-house-fill"></i> Home</a></li>
-          <li><a class="color-white text-decoration-none" routerLink="/sobre" aria-label="Acessar a página com informações sobre as Cataratas do Iguaçu"><i class="bi bi-info-circle-fill"></i> Sobre</a></li>
-          <li><a class="color-white text-decoration-none" routerLink="/lazer" aria-label="Acessar a página com informações sobre as atividades de lazer das Cataratas do Iguaçu"><i class="bi bi-tree-fill"></i> Lazer</a></li>
-          <li><a class="color-white text-decoration-none" routerLink="/ingressos" aria-label="Acessar a página de ingressos"><i class="bi bi-ticket-perforated-fill"></i> Ingressos</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" aria-label="Voltar a página inicial"><i class="bi bi-house-fill"></i> Home</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/sobre" routerLinkActive="ativo" aria-label="Acessar a página com informações sobre as Cataratas do Iguaçu"><i class="bi bi-info-circle-fill"></i> Sobre</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/lazer" routerLinkActive="ativo" aria-label="Acessar a página com informações sobre as atividades de lazer das Cataratas do Iguaçu"><i class="bi bi-tree-fill"></i> Lazer</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/ingressos" routerLinkActive="ativo" aria-label="Acessar a página de ingressos"><i class="bi bi-ticket-perforated-fill"></i> Ingressos</a></li>
           @if (auth.admin()) {
-            <li><a class="color-white text-decoration-none" routerLink="/admin" aria-label="Abrir o painel administrativo"><i class="bi bi-shield-lock-fill"></i> Admin</a></li>
+            <li><a class="color-white text-decoration-none" routerLink="/admin" routerLinkActive="ativo" aria-label="Abrir o painel administrativo"><i class="bi bi-shield-lock-fill"></i> Admin</a></li>
           }
           <li class="login-registro w-100 d-flex justify-content-center">
             <div>

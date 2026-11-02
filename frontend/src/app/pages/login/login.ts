@@ -18,8 +18,9 @@ import { Auth } from '../../core/auth';
             <input type="email" id="email" formControlName="email" placeholder="  seuemail@exemplo.com" aria-label="Digite seu e-mail" autocomplete="email" />
             @if (inv('email')) { <span class="erro-form">Informe um e-mail válido.</span> }
             <label class="d-block" for="senha">Senha:</label>
-            <input type="password" id="senha" formControlName="senha" placeholder="  Sua senha" aria-label="Digite sua senha" autocomplete="current-password" />
+            <input [type]="verSenha() ? 'text' : 'password'" id="senha" formControlName="senha" placeholder="  Sua senha" aria-label="Digite sua senha" autocomplete="current-password" />
             @if (inv('senha')) { <span class="erro-form">Informe a senha.</span> }
+            <button type="button" class="ver-senha" (click)="verSenha.set(!verSenha())"><i class="bi" [class.bi-eye]="!verSenha()" [class.bi-eye-slash]="verSenha()"></i> {{ verSenha() ? 'Ocultar senha' : 'Mostrar senha' }}</button>
 
             <div class="esqueceu-senha">
               <a class="color-white" (click)="esqueci()" aria-label="Recuperar senha">Esqueceu sua senha?</a>
@@ -50,6 +51,7 @@ export class Login {
   rota = inject(ActivatedRoute);
   form = this.fb.nonNullable.group({ email: ['', [Validators.required, Validators.email]], senha: ['', Validators.required] });
   enviando = signal(false);
+  verSenha = signal(false);
   erro = signal('');
   info = signal('');
   inv(c: 'email' | 'senha') { const x = this.form.controls[c]; return x.invalid && (x.touched || x.dirty); }
