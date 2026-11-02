@@ -1,0 +1,49 @@
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../core/auth';
+
+@Component({
+  selector: 'app-nav',
+  imports: [RouterLink],
+  template: `
+    <nav class="navbar d-flex align-items-center position-fixed">
+      <section class="nav-logo">
+        <a routerLink="/" aria-label="Voltar para a página inicial">
+          <img src="imagens/parque-logo.png" alt="Imagem da logo das Cataratas do Iguaçu" />
+        </a>
+      </section>
+
+      <section class="nav-links d-flex align-items-center">
+        <i (click)="aberto.set(!aberto())" class="bi bi-list color-white" role="button" aria-label="Abrir menu"></i>
+        <ul id="nav-links-lista" class="list-unstyled w-100" [class.aberto]="aberto()" (click)="aberto.set(false)">
+          <li><a class="color-white text-decoration-none" routerLink="/" aria-label="Voltar a página inicial"><i class="bi bi-house-fill"></i> Home</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/sobre" aria-label="Acessar a página com informações sobre as Cataratas do Iguaçu"><i class="bi bi-info-circle-fill"></i> Sobre</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/lazer" aria-label="Acessar a página com informações sobre as atividades de lazer das Cataratas do Iguaçu"><i class="bi bi-tree-fill"></i> Lazer</a></li>
+          <li><a class="color-white text-decoration-none" routerLink="/ingressos" aria-label="Acessar a página de ingressos"><i class="bi bi-ticket-perforated-fill"></i> Ingressos</a></li>
+          <li class="login-registro w-100 d-flex justify-content-center">
+            <div>
+              @if (auth.usuario(); as u) {
+                <span class="nav-usuario me-2">Olá, {{ primeiroNome(u.nome) }}</span>
+                <a (click)="sair()" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none" aria-label="Sair da conta">Sair</a>
+              } @else {
+                <a routerLink="/login" aria-label="ir para a página de login" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none">Login</a>
+                <a routerLink="/registre-se" aria-label="ir para a página de cadastro" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none">Registre-se</a>
+              }
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="nav-natureza-img mt-5">
+        <img src="imagens/nav-natureza-img.png" alt="Imagem de um rio com uma árvore" />
+      </section>
+    </nav>
+  `,
+})
+export class Nav {
+  auth = inject(Auth);
+  private router = inject(Router);
+  aberto = signal(false);
+  primeiroNome = (n: string) => n.split(' ')[0];
+  sair() { this.auth.sair(); }
+}

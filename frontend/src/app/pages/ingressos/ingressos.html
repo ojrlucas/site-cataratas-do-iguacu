@@ -1,0 +1,77 @@
+<div class="bg-titulo d-flex justify-content-center align-items-center flex-column color-white">
+  <section class="titulo">
+    <h1 class="text-center text-uppercase">
+      <span class="titulo-esquerda fw-normal d-block text-uppercase">parque</span>
+      nacional do Iguaçu
+      <span class="titulo-direita fw-normal d-block text-uppercase">patrimônio mundial natural</span>
+    </h1>
+  </section>
+</div>
+
+<div class="conteudo d-flex justify-content-center flex-wrap">
+  <section class="subtitulo mt-4 mb-4 d-flex flex-column align-items-center">
+    <h2 class="text-uppercase">seus <span class="azul fw-bold">ingressos</span></h2>
+    @if (erro()) { <p class="erro-pagina">{{ erro() }}</p> }
+
+    <div class="cards-ingresso d-flex flex-wrap justify-content-center mt-3 mb-5">
+      @for (t of tipos(); track t.id) {
+        <div class="flex-card d-flex">
+          <img [src]="t.imagem" [alt]="'Ingresso ' + t.nome" />
+          <span [class.card-exibido]="lerMais() === t.id">
+            <h3 class="w-100 color-white text-center text-capitalize mt-3 mb-3">{{ t.nome }}</h3>
+            <p class="color-white">{{ t.descricao }}</p>
+            <p class="preco">{{ t.precoCentavos / 100 | currency: 'BRL' }} por pessoa</p>
+            <a (click)="comprar(t)" class="text-decoration-none d-flex align-items-center justify-content-center btn-link text-white">Comprar</a>
+            <a (click)="lerMais.set(lerMais() === t.id ? null : t.id)" class="text-decoration-none d-flex align-items-center justify-content-center btn-link text-white mt-4 saiba-mais">{{ lerMais() === t.id ? 'Ler menos' : 'Ler mais' }}</a>
+          </span>
+        </div>
+      }
+    </div>
+
+    <h2 class="text-uppercase">meus <span class="azul fw-bold">pedidos</span></h2>
+    @if (!auth.logado()) {
+      <p class="mt-3 text-center">Para comprar e ver seus ingressos, <a class="azul fw-bold" routerLink="/login">faça login</a> ou <a class="azul fw-bold" routerLink="/registre-se">registre-se</a>.</p>
+    } @else if (pedidos().length === 0) {
+      <p class="mt-3">Você ainda não possui pedidos.</p>
+    } @else {
+      <div class="lista-pedidos d-flex flex-column gap-3 mt-3 mb-5">
+        @for (p of pedidos(); track p.id) {
+          <div class="pedido d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+              <strong>{{ p.codigo }}</strong><br />
+              {{ p.quantidade }}x {{ p.tipoNome }} · visita em {{ p.dataVisita + 'T12:00:00' | date: 'dd/MM/yyyy' }}<br />
+              Total: {{ p.totalCentavos / 100 | currency: 'BRL' }}
+            </div>
+            <a (click)="verQr(p.id)" class="btn btn-sm btn-light">QrCode</a>
+          </div>
+        }
+      </div>
+    }
+  </section>
+</div>
+
+@if (comprando(); as t) {
+  <div class="divs-informacoes-home aberto" role="dialog" aria-modal="true" aria-label="Comprar ingresso">
+    <div class="modal-form color-white">
+      <h1 class="text-uppercase text-center fs-4">Comprar <span class="fw-bold">{{ t.nome }}</span></h1>
+      <form [formGroup]="form" (ngSubmit)="confirmar()" class="mt-3 mx-auto">
+        <label for="quantidade">Quantidade (1 a 10):</label>
+        <input id="quantidade" type="number" min="1" max="10" formControlName="quantidade" />
+        <label for="dataVisita">Data da visita:</label>
+        <input id="dataVisita" type="date" [min]="hoje" formControlName="dataVisita" />
+        <p class="mt-3 text-center">Total: <strong>{{ total() | currency: 'BRL' }}</strong></p>
+        @if (erroForm()) { <p class="erro-form">{{ erroForm() }}</p> }
+        <button class="form color-white" type="submit" [disabled]="form.invalid || enviando()">{{ enviando() ? 'Processando...' : 'Confirmar compra' }}</button>
+        <button class="form color-white mt-2" type="button" style="background:#6c757d" (click)="comprando.set(null)">Cancelar</button>
+      </form>
+    </div>
+  </div>
+}
+
+@if (qr(); as q) {
+  <div class="divs-informacoes-home aberto flex-column" (click)="qr.set(null)" role="dialog" aria-modal="true" aria-label="QR Code do ingresso">
+    <img class="qr-img" [src]="q.qrcode" [alt]="'QR Code do pedido ' + q.codigo" />
+    <p class="color-white mt-3 mb-0 text-center"><strong>{{ q.codigo }}</strong><br />{{ q.quantidade }}x {{ q.tipoNome }} · {{ q.dataVisita + 'T12:00:00' | date: 'dd/MM/yyyy' }}</p>
+    <button class="btn btn-outline-light text-uppercase mt-4" type="button">Fechar</button>
+  </div>
+}

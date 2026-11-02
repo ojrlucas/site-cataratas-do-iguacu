@@ -1,0 +1,51 @@
+<section class="bg-titulo home d-flex justify-content-center align-items-center flex-column color-white">
+  <div class="titulo">
+    <h1 class="text-center text-uppercase">
+      <span class="titulo-esquerda fw-normal d-block text-uppercase">parque</span>
+      nacional do Iguaçu
+      <span class="titulo-direita fw-normal d-block text-uppercase">patrimônio mundial natural</span>
+    </h1>
+  </div>
+
+  <div class="comprar-ingresso">
+    <a class="text-uppercase d-flex text-decoration-none color-white fw-bold" routerLink="/ingressos">COMPRAR INGRESSO</a>
+  </div>
+
+  <div class="informacoes-home d-flex text-center align-items-center">
+    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('funcionamento')"><i class="azul bi bi-clock-fill me-2"></i> Funcionamento</a>
+    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('como-chegar')"><i class="azul bi bi-geo-alt-fill me-2"></i> Como chegar</a>
+    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('estacionamento')"><i class="azul bi bi-car-front-fill me-2"></i> Estacionamento</a>
+    <a class="text-decoration-none d-inline-flex text-center align-items-center justify-content-center" (click)="abrir('mapa')"><i class="azul bi bi-map-fill me-2"></i> Mapa</a>
+  </div>
+</section>
+
+<div id="div-funcionamento" class="divs-informacoes-home" [class.aberto]="painel() === 'funcionamento'" (click)="fechar()">
+  <div class="text-info-home">
+    <h1 class="color-white text-uppercase text-center">Funcionamento <span class="fw-bold">do parque</span></h1>
+    <p class="color-white mt-5">{{ parque()?.funcionamento?.aberturaDiaria }}</p>
+    @for (h of parque()?.funcionamento?.horarios; track h.dias) {
+      <p class="color-white">{{ h.dias }}: {{ h.horario }}</p>
+    }
+  </div>
+</div>
+
+<div id="div-como-chegar" class="divs-informacoes-home" [class.aberto]="painel() === 'como-chegar'">
+  <div class="iframe d-flex flex-wrap justify-content-center align-items-center">
+    @if (painel() === 'como-chegar') {
+      <iframe title="Mapa de como chegar ao Parque Nacional do Iguaçu" [src]="mapaSeguro" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    }
+    <button (click)="fechar()" class="btn btn-outline-light text-uppercase mt-5" type="button">Sair</button>
+  </div>
+</div>
+
+<div id="div-estacionamento" class="divs-informacoes-home" [class.aberto]="painel() === 'estacionamento'" (click)="fechar()">
+  <div class="text-info-home">
+    <h1 class="color-white text-uppercase text-center"><span class="fw-bold">Estacionamento</span> do parque</h1>
+    <p class="color-white mt-5">{{ parque()?.estacionamento }}</p>
+    <span class="d-flex justify-content-center"><button disabled class="w-50 btn btn-outline-light text-uppercase mt-4" type="button">reservar</button></span>
+  </div>
+</div>
+
+<div id="div-mapa" class="divs-informacoes-home" [class.aberto]="painel() === 'mapa'" (click)="fechar()">
+  <div class="imagem-mapa"><img src="imagens/mapa.png" alt="mapa do parque nacional do iguaçu" /></div>
+</div>
