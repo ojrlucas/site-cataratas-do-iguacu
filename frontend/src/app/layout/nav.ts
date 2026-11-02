@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../core/auth';
+import { TemaBotao } from '../core/tema';
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, TemaBotao],
   template: `
     <nav class="navbar d-flex align-items-center position-fixed">
       <section class="nav-logo">
@@ -24,7 +25,8 @@ import { Auth } from '../core/auth';
             <li><a class="color-white text-decoration-none" routerLink="/admin" routerLinkActive="ativo" aria-label="Abrir o painel administrativo"><i class="bi bi-shield-lock-fill"></i> Admin</a></li>
           }
           <li class="login-registro w-100 d-flex justify-content-center">
-            <div>
+            <div class="d-flex align-items-center gap-2">
+              <app-tema />
               @if (auth.usuario(); as u) {
                 <span class="nav-usuario me-2">Olá, {{ primeiroNome(u.nome) }}</span>
                 <a (click)="sair()" class="btn d-inline-flex justify-content-center text-center text-white text-decoration-none" aria-label="Sair da conta">Sair</a>

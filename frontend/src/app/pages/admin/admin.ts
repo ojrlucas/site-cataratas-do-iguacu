@@ -6,12 +6,13 @@ import {
 } from '../../core/api';
 import { Auth } from '../../core/auth';
 import { Modal } from '../../core/modal';
+import { Contar } from '../../core/contar';
 
 type Aba = 'resumo' | 'pedidos' | 'usuarios' | 'ingressos' | 'atividades';
 
 @Component({
   selector: 'app-admin',
-  imports: [ReactiveFormsModule, CurrencyPipe, DatePipe, Modal],
+  imports: [ReactiveFormsModule, CurrencyPipe, DatePipe, Modal, Contar],
   templateUrl: './admin.html',
 })
 export class Admin {

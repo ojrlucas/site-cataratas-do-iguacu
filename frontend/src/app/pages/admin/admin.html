@@ -17,11 +17,11 @@
     @case ('resumo') {
       @if (resumo(); as r) {
         <div class="metricas">
-          <div class="metrica"><i class="bi bi-people-fill"></i><span>Usuários</span><strong>{{ r.usuarios }}</strong></div>
-          <div class="metrica"><i class="bi bi-receipt"></i><span>Pedidos</span><strong>{{ r.pedidos }}</strong></div>
-          <div class="metrica"><i class="bi bi-ticket-perforated-fill"></i><span>Ingressos vendidos</span><strong>{{ r.ingressos }}</strong></div>
-          <div class="metrica"><i class="bi bi-calendar-check-fill"></i><span>Pedidos hoje</span><strong>{{ r.hoje }}</strong></div>
-          <div class="metrica"><i class="bi bi-cash-coin"></i><span>Receita (fictícia)</span><strong>{{ r.receitaCentavos / 100 | currency: 'BRL' }}</strong></div>
+          <div class="metrica"><i class="bi bi-people-fill"></i><span>Usuários</span><strong [appContar]="r.usuarios">{{ r.usuarios }}</strong></div>
+          <div class="metrica"><i class="bi bi-receipt"></i><span>Pedidos</span><strong [appContar]="r.pedidos">{{ r.pedidos }}</strong></div>
+          <div class="metrica"><i class="bi bi-ticket-perforated-fill"></i><span>Ingressos vendidos</span><strong [appContar]="r.ingressos">{{ r.ingressos }}</strong></div>
+          <div class="metrica"><i class="bi bi-calendar-check-fill"></i><span>Pedidos hoje</span><strong [appContar]="r.hoje">{{ r.hoje }}</strong></div>
+          <div class="metrica"><i class="bi bi-cash-coin"></i><span>Receita (fictícia)</span><strong [appContar]="r.receitaCentavos / 100" formato="moeda">{{ r.receitaCentavos / 100 | currency: 'BRL' }}</strong></div>
         </div>
       }
     }

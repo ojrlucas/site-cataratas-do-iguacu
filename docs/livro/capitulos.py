@@ -41,6 +41,10 @@ CAPS.append(("Visão geral e telas", """
 <h2 class="s">Login e cadastro</h2>
 <p>As telas de autenticação seguem o design original: formulário em coluna azul com a ilustração da natureza ao fundo e a logo do parque sobre a foto das cataratas.</p>
 <figure class="par"><div><img src="img/login.jpg" alt="Tela de login"><figcaption>Login.</figcaption></div><div><img src="img/registro.jpg" alt="Tela de cadastro"><figcaption>Cadastro.</figcaption></div></figure>
+<h2 class="s">Modo claro e escuro</h2>
+<p>Um botão com ícone de sol e lua alterna o tema. A escolha segue o sistema por padrão, é guardada no navegador e aplicada antes da primeira renderização. A troca acontece com transição suave de cores.</p>
+<figure class="par"><div><img src="img/escuro-ingressos.jpg" alt="Ingressos no modo escuro"><figcaption>Ingressos no modo escuro.</figcaption></div><div><img src="img/escuro-mobile.jpg" alt="Lazer no modo escuro, celular"><figcaption>Lazer no modo escuro (celular).</figcaption></div></figure>
+<figure><img src="img/escuro-admin.jpg" alt="Painel no modo escuro"><figcaption>Painel administrativo no modo escuro, com contadores animados.</figcaption></figure>
 <h2 class="s">Painel administrativo</h2>
 <p>Visível apenas para superadmins (item <em>Admin</em> no menu). Reúne cinco abas: Resumo, Pedidos, Usuários, Ingressos e Lazer.</p>
 """ + fig('admin-resumo.jpg','Painel administrativo: resumo.') + fig('admin-pedidos.jpg','Painel administrativo: pedidos.') + fig('admin-usuarios.jpg','Painel administrativo: usuários e papéis.') + fig('admin-editar-ingresso.jpg','Edição de um tipo de ingresso.') + """
@@ -82,6 +86,7 @@ RF = [
  ('RF18','Permitir ao superadmin criar e editar tipos de ingresso (nome, preço, descrição, imagem e disponibilidade).','@Alta'),
  ('RF19','Permitir ao superadmin criar, editar e excluir atividades de lazer.','@Alta'),
  ('RF20','Permitir ao desenvolvedor cadastrar e alterar superadmins pelo terminal (CLI).','@Alta'),
+ ('RF22','Permitir alternar entre tema claro e escuro, respeitando a preferência do sistema e guardando a escolha do usuário.','@Média'),
  ('RF21','Exibir, no rodapé e nas páginas Sobre e Ingressos, o aviso de que se trata de um projeto de fã, sem vínculo com o parque real.','@Alta'),
 ]
 RNF = [
@@ -98,6 +103,8 @@ RNF = [
  ('RNF11','Confiabilidade','Healthcheck do back-end, reinício automático, dados em volume persistente e falha de e-mail sem perda de pedido.'),
  ('RNF12','Manutenibilidade','Código modular, sem comentários, com nomes expressivos, componentes standalone e testes automatizados do back-end.'),
  ('RNF13','Compatibilidade','Navegadores modernos (Chrome, Edge, Firefox e Safari recentes).'),
+ ('RNF15','Usabilidade','Tema claro e escuro com troca suave, aplicado antes da renderização para evitar flash de tema errado.'),
+ ('RNF16','Usabilidade','Animações de entrada dos cartões, transição entre páginas, contadores e microinterações, todas desativadas com prefers-reduced-motion.'),
  ('RNF14','Privacidade','Coleta mínima de dados; senhas nunca retornadas pela API; dados e valores são fictícios.'),
 ]
 RN = [
@@ -118,11 +125,12 @@ RN = [
  ('RN15','O parque funciona todos os dias: segunda a sexta das 9h às 16h; sábado e domingo das 8h30 às 16h.'),
  ('RN16','Falha no envio de e-mail não cancela o pedido; ele é marcado como e-mail pendente e pode ser reenviado.'),
  ('RN17','Todos os valores, pagamentos e e-mails do sistema são fictícios e não possuem validade real.'),
+ ('RN19','Sem escolha prévia, o tema segue a preferência do sistema operacional; a escolha manual é guardada no navegador e prevalece.'),
  ('RN18','O sistema deve sempre informar que é uma homenagem de fã e não representa o site oficial.'),
 ]
 
 CAPS.append(("Requisitos funcionais", linhas([(a,b,c) for a,b,c in RF], ['ID','Descrição','Prioridade']).replace('<th>ID</th>','<th>ID</th>') + """
-<div class="destaque verde"><p>Os requisitos RF01 a RF21 estão implementados e cobertos por testes automatizados (API e CLI) e por verificação manual em desktop e celular.</p></div>
+<div class="destaque verde"><p>Os requisitos RF01 a RF22 estão implementados e cobertos por testes automatizados (API e CLI) e por verificação manual em desktop e celular.</p></div>
 <h2 class="s">Atores</h2>
 <table><thead><tr><th>Ator</th><th>Descrição</th></tr></thead><tbody>
 <tr><td class="id">Visitante</td><td>Qualquer pessoa sem login; acessa conteúdo público.</td></tr>
@@ -218,6 +226,10 @@ CAPS.append(("Front-end Angular", """
 </div>
 <h3 class="s">Responsividade</h3>
 <p>As grades usam <code>repeat(auto-fill, minmax(min(100%, 290px), 1fr))</code>, de modo que cada cartão ocupa no máximo a largura disponível. Os contêineres têm <code>min-width: 0</code> e <code>overflow-wrap: anywhere</code>, as tabelas rolam dentro do próprio quadro e as imagens de cartão são recortadas com <code>object-fit: cover</code>. A verificação automatizada com navegador headless confirmou ausência de rolagem horizontal em todas as telas em 390 px e 1280 px de largura.</p>
+<h3 class="s">Tema claro e escuro</h3>
+<p>O serviço <code>Tema</code> grava <code>data-tema</code> na raiz do documento e a escolha em <code>localStorage</code>. Um pequeno script externo (<code>tema-init.js</code>, compatível com a CSP) define o tema antes do Angular iniciar, evitando o flash. Todas as cores de superfície, texto, bordas e chips vêm de variáveis CSS (<code>--superficie</code>, <code>--titulo</code>, <code>--borda</code>, entre outras) redefinidas em <code>[data-tema="escuro"]</code>.</p>
+<h3 class="s">Animações e microinterações</h3>
+<ul><li>Entrada dos cartões com revelação ao rolar (<code>IntersectionObserver</code>) e atraso escalonado.</li><li>Transição suave entre páginas e entrada do título e da barra de atalhos.</li><li>Elevação, brilho deslizante e zoom da imagem ao passar o mouse nos cartões.</li><li>Esqueletos de carregamento, avisos (toasts) animados e contadores numéricos no painel.</li><li>Botão de tema com troca rotativa entre sol e lua.</li><li>Tudo é desativado quando o usuário prefere movimento reduzido.</li></ul>
 <h3 class="s">Acessibilidade</h3>
 <ul><li>Rótulos <code>aria-label</code> em links, botões de ícone e janelas.</li><li>Anel de foco visível e campos associados a rótulos.</li><li>Animações desativadas com <code>prefers-reduced-motion</code>.</li><li>Contraste alto entre texto e fundo nos cartões e botões.</li></ul>
 """))

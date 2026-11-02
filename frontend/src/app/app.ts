@@ -5,13 +5,15 @@ import { Nav } from './layout/nav';
 import { Footer } from './layout/footer';
 import { Auth } from './core/auth';
 import { Toasts } from './core/toast';
+import { TemaBotao } from './core/tema';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Nav, Footer, Toasts],
+  imports: [RouterOutlet, Nav, Footer, Toasts, TemaBotao],
   template: `
     <app-toasts />
     @if (semLayout()) {
+      <app-tema class="tema-flutuante" />
       <router-outlet />
     } @else {
       <div id="container">
