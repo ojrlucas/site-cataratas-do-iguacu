@@ -1,43 +1,48 @@
-## 🌊 Site Institucional Cataratas do Iguaçu
+## Cataratas do Iguaçu: homenagem de um fã
 
-Site institucional fictício do Parque Nacional do Iguaçu (projeto educacional Entra21).
-Front-end em **Angular** (design original mantido: Bootstrap + CSS próprio) e back-end em **Node.js** (Express + SQLite), empacotados em **Docker**.
+Projeto de portfólio criado por um fã para homenagear as Cataratas do Iguaçu. **Não representa o site real do parque, não possui vínculo com o Parque Nacional do Iguaçu e não realiza vendas reais.** Ingressos, preços e e-mails são fictícios.
 
-Projeto Figma: https://www.figma.com/design/FbTv7fyuP7kDdv6qgzyicu/Parque-Nacional-do-Igua%C3%A7u?node-id=0-1&t=dUj65HaNXLgTcdQg-1
+Front-end em Angular (design original mantido), back-end em Node.js (Express + SQLite), tudo em Docker.
 
-## 🚀 Executando com Docker
+Documentação completa (requisitos, regras de negócio, arquitetura, segurança): [docs/livro/Cataratas-do-Iguacu-Livro-do-Sistema.pdf](docs/livro/Cataratas-do-Iguacu-Livro-do-Sistema.pdf)
+
+## Executando com Docker
 
 ```bash
-cp .env.example .env   # edite JWT_SECRET
+cp .env.example .env
 docker compose up --build
 ```
 
-Acesse http://localhost:8080. O nginx serve o Angular e faz proxy de `/api` para o back-end; o banco SQLite fica no volume `dados`.
+- Site: http://localhost:8080
+- E-mails de teste (Mailpit): http://localhost:8025
 
-## 🧑‍💻 Desenvolvimento local (Node 22.13+)
+Defina `JWT_SECRET` no `.env` com pelo menos 32 caracteres (`openssl rand -hex 32`).
+
+## Superadmin pelo terminal
 
 ```bash
-cd backend && npm install && npm run dev      # API em :3000
-cd frontend && npm install && npm start       # Angular em :4200 (proxy para /api)
-cd backend && npm test                        # testes da API
+docker compose exec backend node src/cli.js superadmin criar --email voce@exemplo.com --nome "Seu Nome"
+docker compose exec backend node src/cli.js superadmin atualizar --email voce@exemplo.com --novo-email outro@exemplo.com
+docker compose exec backend node src/cli.js superadmin promover --email usuario@exemplo.com
+docker compose exec backend node src/cli.js superadmin rebaixar --email usuario@exemplo.com
+docker compose exec backend node src/cli.js superadmin listar
 ```
 
-## 📁 Estrutura
+Sem `--senha`, a senha é solicitada de forma oculta.
+
+## Desenvolvimento local (Node 22.13+)
+
+```bash
+cd backend && npm install && npm run dev
+cd frontend && npm install && npm start
+cd backend && npm test
+```
+
+## Estrutura
 
 ```
-backend/    API Express (auth JWT, atividades, ingressos, pedidos + QR Code)
-frontend/   Angular (Home, Sobre, Lazer, Ingressos, Login, Registro)
+backend/    API Express, SQLite, e-mail, CLI e testes
+frontend/   Angular (Home, Sobre, Lazer, Ingressos, Login, Registro, Admin)
+docs/livro/ Fontes e PDF do livro do sistema
 docker-compose.yml
 ```
-
-## 🔌 API
-
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/api/parque`, `/api/atividades`, `/api/ingressos/tipos` | Conteúdo público |
-| POST | `/api/auth/registro`, `/api/auth/login`, `/api/auth/esqueci-senha` | Autenticação |
-| GET | `/api/auth/me` | Usuário logado |
-| POST/GET | `/api/pedidos` | Comprar / listar ingressos (autenticado) |
-| GET | `/api/pedidos/:id/qrcode` | QR Code do pedido |
-
-Os pagamentos e valores são fictícios (site de estudos).
